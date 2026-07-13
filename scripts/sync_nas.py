@@ -394,6 +394,8 @@ def build_site(manifest):
   .lightbox-media{{position:relative;}}
   .lightbox-inner img{{max-width:100%;max-height:58vh;border-radius:16px 16px 0 0;box-shadow:0 12px 40px rgba(0,0,0,.4);object-fit:contain;background:#000;display:block;width:100%;user-select:none;touch-action:pan-y;}}
   .lightbox-inner img[src=""]{{display:none;}}
+  .lightbox-inner video{{max-width:100%;max-height:58vh;border-radius:16px 16px 0 0;box-shadow:0 12px 40px rgba(0,0,0,.4);background:#000;display:none;width:100%;}}
+  .lightbox-inner video.show{{display:block;}}
   .lb-arrow{{position:absolute;top:50%;transform:translateY(-50%);background:rgba(20,15,12,.5);color:#fff;border:none;width:38px;height:38px;border-radius:50%;font-size:19px;cursor:pointer;display:none;align-items:center;justify-content:center;z-index:2;}}
   .lb-arrow:hover{{background:rgba(20,15,12,.75);}}
   .lb-prev{{left:10px;}}
@@ -472,6 +474,7 @@ def build_site(manifest):
     <div class="lightbox-media" id="lightbox-media">
       <span class="lb-counter" id="lb-counter"></span>
       <img id="lightbox-img" src="" alt="확대 이미지">
+      <video id="lightbox-video" controls playsinline></video>
       <button class="lb-arrow lb-prev" id="lb-prev" onclick="lightboxPrev()">‹</button>
       <button class="lb-arrow lb-next" id="lb-next" onclick="lightboxNext()">›</button>
     </div>
@@ -540,10 +543,21 @@ def build_site(manifest):
     }}
   }}
 
+  function stopVideo(){{
+    const video = document.getElementById('lightbox-video');
+    video.pause();
+    video.removeAttribute('src');
+    video.load();
+    video.classList.remove('show');
+  }}
+
   function showCurrentPhoto(){{
     const item = currentGallery[currentIndex];
     if(!item) return;
-    document.getElementById('lightbox-img').src = item.file;
+    stopVideo();
+    const img = document.getElementById('lightbox-img');
+    img.style.display = '';
+    img.src = item.file;
     document.getElementById('comment-box').classList.remove('no-image');
     updateArrows();
     loadComments(item.file);
@@ -560,8 +574,13 @@ def build_site(manifest):
   window.openVideoLightbox = function(file){{
     currentMode = 'video';
     currentGallery = [];
-    document.getElementById('lightbox-img').src = '';
-    document.getElementById('comment-box').classList.add('no-image');
+    const img = document.getElementById('lightbox-img');
+    img.src = '';
+    img.style.display = 'none';
+    const video = document.getElementById('lightbox-video');
+    video.src = file;
+    video.classList.add('show');
+    document.getElementById('comment-box').classList.remove('no-image');
     updateArrows();
     document.getElementById('lightbox').classList.add('open');
     loadComments(file);
@@ -582,6 +601,7 @@ def build_site(manifest):
   window.closeLightbox = function(e){{
     if(e.target.id === 'lightbox' || e.target.classList.contains('lightbox-close')){{
       document.getElementById('lightbox').classList.remove('open');
+      stopVideo();
       if(unsub){{ unsub(); unsub = null; }}
     }}
   }};
@@ -591,6 +611,7 @@ def build_site(manifest):
     if(e.key === 'Escape'){{
       document.getElementById('lightbox').classList.remove('open');
       document.getElementById('day-panel').classList.remove('open');
+      stopVideo();
       if(unsub){{ unsub(); unsub = null; }}
     }} else if(lbOpen && e.key === 'ArrowLeft'){{
       lightboxPrev();
