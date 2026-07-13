@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>우리 아기 이야기 · 태담 다이어리</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Pretendard:wght@400;500;600;700&display=swap');
+  :root{
+    --bg:#fffdf9; --mint:#a9ddd0; --mint-soft:#e3f5f0;
+    --coral:#ff9d85; --coral-soft:#ffe4dc; --yellow:#ffd873; --yellow-soft:#fff3d6;
+    --ink:#4a4038; --ink-soft:#a39a91; --card:#ffffff; --line:#f2ebe3;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{font-family:'Pretendard','Apple SD Gothic Neo',sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;}
+  .round-font{font-family:'Baloo 2','Pretendard',sans-serif;}
+
+  .hero{padding:56px 24px 40px;text-align:center;background:linear-gradient(180deg, var(--mint-soft) 0%, var(--bg) 78%);border-radius:0 0 40px 40px;position:relative;overflow:hidden;}
+  .hero .deco{position:absolute;font-size:28px;opacity:.55;animation:float 5s ease-in-out infinite;}
+  .hero .d1{top:20px;left:8%;} .hero .d2{top:60px;right:10%;animation-delay:1.2s;}
+  .hero .d3{bottom:10px;left:20%;animation-delay:2s;} .hero .d4{bottom:30px;right:22%;animation-delay:.6s;}
+  @keyframes float{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-10px) rotate(6deg);}}
+  .hero-badge{display:inline-block;background:var(--card);color:var(--coral);font-weight:700;font-size:12.5px;padding:6px 16px;border-radius:999px;box-shadow:0 4px 12px rgba(255,157,133,.25);margin-bottom:16px;}
+  .hero h1{font-family:'Baloo 2',sans-serif;font-size:clamp(26px,5vw,40px);font-weight:700;margin:0 0 10px;line-height:1.3;}
+  .hero h1 .hl{color:var(--coral);}
+  .hero p{color:var(--ink-soft);font-size:14.5px;max-width:420px;margin:0 auto;line-height:1.6;}
+  .dday{display:inline-block;margin-top:18px;background:var(--card);border:2px solid var(--coral-soft);padding:8px 20px;border-radius:999px;font-weight:700;color:var(--coral);font-size:14px;}
+
+  .week-nav{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:26px;}
+  .week-nav a{text-decoration:none;font-weight:600;font-size:13px;color:var(--ink);background:var(--card);border:2px solid var(--mint-soft);padding:7px 16px;border-radius:999px;transition:all .2s ease;}
+  .week-nav a:hover{background:var(--mint);border-color:var(--mint);color:#fff;transform:translateY(-2px);}
+
+  .highlight{max-width:640px;margin:30px auto 0;text-align:center;}
+  .highlight img{width:100%;border-radius:24px;box-shadow:0 8px 24px rgba(74,64,56,.12);}
+  .highlight .cap{margin-top:10px;font-size:12.5px;color:var(--ink-soft);}
+
+  .note{max-width:640px;margin:26px auto 0;padding:12px 18px;background:var(--yellow-soft);border-radius:14px;font-size:12px;color:#8a6a2a;text-align:center;}
+
+  main{max-width:900px;margin:0 auto;padding:44px 20px 90px;}
+  .week-block{margin-bottom:56px;scroll-margin-top:30px;}
+  .week-header{display:flex;align-items:center;gap:12px;margin-bottom:18px;}
+  .week-icon{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+  .week-header h2{font-size:20px;margin:0;}
+  .date-tag{font-size:12px;font-weight:600;color:#fff;background:var(--coral);padding:4px 12px;border-radius:999px;margin-left:auto;}
+
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  @media (max-width:640px){.grid{grid-template-columns:repeat(2,1fr);}}
+  .card{position:relative;border-radius:20px;overflow:hidden;box-shadow:0 4px 14px rgba(74,64,56,.08);transition:transform .3s ease;background:#000;}
+  .card:hover{transform:translateY(-4px) scale(1.02);}
+  .card.wide{grid-column:span 3;}
+  @media (max-width:640px){.card.wide{grid-column:span 2;}}
+  .card img{width:100%;height:220px;object-fit:cover;display:block;}
+  .card.wide video{width:100%;display:block;max-height:480px;}
+  .card-overlay{position:absolute;left:0;right:0;bottom:0;padding:10px 12px;background:linear-gradient(to top, rgba(20,15,12,.7), rgba(20,15,12,0));color:#fff;pointer-events:none;}
+  .card.wide .card-overlay{position:static;background:none;color:var(--ink-soft);padding:8px 2px 0;}
+  .card-overlay .date{font-size:11px;opacity:.9;}
+  .card-overlay .label{font-size:13px;font-weight:600;}
+
+  footer{text-align:center;padding:30px 24px 50px;color:var(--ink-soft);font-size:12px;}
+  footer strong{color:var(--ink);}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <span class="deco d1">⭐</span><span class="deco d2">🎈</span><span class="deco d3">🧸</span><span class="deco d4">☁️</span>
+  <div class="hero-badge">🤰 Pregnancy Diary</div>
+  <h1>우리 아기를 <span class="hl">기다리는</span> 시간,<br>하루하루 기록해요</h1>
+  <p>초음파 사진과 영상을 촬영일 기준 임신 주차별로 자동 정리했어요.</p>
+  <div class="dday" id="dday">D-day 계산 중...</div>
+
+  <div class="week-nav">
+    <a href="#w5-6">5주6일</a><a href="#w6-6">6주6일</a><a href="#w8-0">8주0일</a><a href="#w13-6">13주6일</a><a href="#w14-6">14주6일</a>
+  </div>
+
+  <div class="highlight">
+    <img src="timeline_5w_14w.gif" alt="지금까지의 여정">
+    <div class="cap">5주 6일 ~ 14주 6일, 지금까지의 여정</div>
+  </div>
+
+  <div class="note">🔒 이 페이지는 공개 링크입니다 · 가족 누구나 링크로 볼 수 있어요</div>
+</div>
+
+<main>
+  
+    <section class="week-block" id="w5-6">
+      <div class="week-header">
+        <div class="week-icon" style="background:#e3f5f0">🤰</div>
+        <h2 class="round-font">임신 5주 6일</h2>
+        <span class="date-tag">2026-05-11</span>
+      </div>
+      <div class="grid">
+        
+        <div class="card">
+          <img src="KakaoTalk_20260713_205238328_04_web.jpg" alt="2026-05-11" loading="lazy">
+          <div class="card-overlay"><div class="date">2026-05-11</div><div class="label">초음파 사진</div></div>
+        </div>
+      </div>
+    </section>
+    <section class="week-block" id="w6-6">
+      <div class="week-header">
+        <div class="week-icon" style="background:#ffe4dc">🤰</div>
+        <h2 class="round-font">임신 6주 6일</h2>
+        <span class="date-tag">2026-05-18</span>
+      </div>
+      <div class="grid">
+        
+        <div class="card">
+          <img src="KakaoTalk_20260713_205238328_03_web.jpg" alt="2026-05-18" loading="lazy">
+          <div class="card-overlay"><div class="date">2026-05-18</div><div class="label">초음파 사진</div></div>
+        </div>
+      </div>
+    </section>
+    <section class="week-block" id="w8-0">
+      <div class="week-header">
+        <div class="week-icon" style="background:#fff3d6">🤰</div>
+        <h2 class="round-font">임신 8주 0일</h2>
+        <span class="date-tag">2026-05-26</span>
+      </div>
+      <div class="grid">
+        
+        <div class="card">
+          <img src="KakaoTalk_20260713_205238328_02_web.jpg" alt="2026-05-26" loading="lazy">
+          <div class="card-overlay"><div class="date">2026-05-26</div><div class="label">초음파 사진</div></div>
+        </div>
+      </div>
+    </section>
+    <section class="week-block" id="w13-6">
+      <div class="week-header">
+        <div class="week-icon" style="background:#e6ecff">🤰</div>
+        <h2 class="round-font">임신 13주 6일</h2>
+        <span class="date-tag">2026-07-06</span>
+      </div>
+      <div class="grid">
+        
+        <div class="card">
+          <img src="KakaoTalk_20260713_205238328_01_web.jpg" alt="2026-07-06" loading="lazy">
+          <div class="card-overlay"><div class="date">2026-07-06</div><div class="label">초음파 사진</div></div>
+        </div>
+        <div class="card">
+          <img src="KakaoTalk_20260713_205238328_web.jpg" alt="2026-07-06" loading="lazy">
+          <div class="card-overlay"><div class="date">2026-07-06</div><div class="label">초음파 사진</div></div>
+        </div>
+      </div>
+    </section>
+    <section class="week-block" id="w14-6">
+      <div class="week-header">
+        <div class="week-icon" style="background:#ffe0ef">🤰</div>
+        <h2 class="round-font">임신 14주 6일</h2>
+        <span class="date-tag">2026-07-13</span>
+      </div>
+      <div class="grid">
+        
+        <div class="card wide">
+          <video controls preload="metadata" playsinline>
+            <source src="cd_web.mp4" type="video/mp4">
+          </video>
+          <div class="card-overlay"><div class="date">2026-07-13</div><div class="label">영상 · 5:46</div></div>
+        </div>
+        <div class="card wide">
+          <video controls preload="metadata" playsinline>
+            <source src="cd2_web.mp4" type="video/mp4">
+          </video>
+          <div class="card-overlay"><div class="date">2026-07-13</div><div class="label">영상 · 3:23</div></div>
+        </div>
+        <div class="card wide">
+          <video controls preload="metadata" playsinline>
+            <source src="cd3_web.mp4" type="video/mp4">
+          </video>
+          <div class="card-overlay"><div class="date">2026-07-13</div><div class="label">영상 · 2:25</div></div>
+        </div>
+        <div class="card wide">
+          <video controls preload="metadata" playsinline>
+            <source src="cd4_web.mp4" type="video/mp4">
+          </video>
+          <div class="card-overlay"><div class="date">2026-07-13</div><div class="label">영상 · 30:36</div></div>
+        </div>
+      </div>
+    </section>
+</main>
+
+<footer>Pregnancy diary · 출산예정일 <strong>2027-01-05</strong> · 새 사진이 추가되면 자동으로 갱신됩니다</footer>
+
+<script>
+  const due = new Date("2027-01-05T00:00:00");
+  const now = new Date();
+  const diff = Math.ceil((due - now) / (1000*60*60*24));
+  document.getElementById('dday').textContent = diff > 0 ? `D-${diff}` : (diff === 0 ? 'D-Day 🎉' : `출산 후 ${-diff}일`);
+</script>
+
+</body>
+</html>
