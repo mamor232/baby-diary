@@ -1,0 +1,11 @@
+[
+  {"source_file": "KakaoTalk_20260713_205238328_04.jpg", "file": "KakaoTalk_20260713_205238328_04_web.jpg", "type": "photo", "datetime": "2026-05-11T18:32:14", "date": "2026-05-11", "week": 5, "day": 6},
+  {"source_file": "KakaoTalk_20260713_205238328_03.jpg", "file": "KakaoTalk_20260713_205238328_03_web.jpg", "type": "photo", "datetime": "2026-05-18T12:19:40", "date": "2026-05-18", "week": 6, "day": 6},
+  {"source_file": "KakaoTalk_20260713_205238328_02.jpg", "file": "KakaoTalk_20260713_205238328_02_web.jpg", "type": "photo", "datetime": "2026-05-26T10:24:21", "date": "2026-05-26", "week": 8, "day": 0},
+  {"source_file": "KakaoTalk_20260713_205238328_01.jpg", "file": "KakaoTalk_20260713_205238328_01_web.jpg", "type": "photo", "datetime": "2026-07-06T18:54:44", "date": "2026-07-06", "week": 13, "day": 6},
+  {"source_file": "KakaoTalk_20260713_205238328.jpg", "file": "KakaoTalk_20260713_205238328_web.jpg", "type": "photo", "datetime": "2026-07-06T18:55:37", "date": "2026-07-06", "week": 13, "day": 6},
+  {"source_file": "cd.mp4", "file": "cd_web.mp4", "type": "video", "date": "2026-07-13", "week": 14, "day": 6, "duration_sec": 346.967},
+  {"source_file": "cd2.mp4", "file": "cd2_web.mp4", "type": "video", "date": "2026-07-13", "week": 14, "day": 6, "duration_sec": 203.767},
+  {"source_file": "cd3.mp4", "file": "cd3_web.mp4", "type": "video", "date": "2026-07-13", "week": 14, "day": 6, "duration_sec": 145.234},
+  {"source_file": "cd4.mp4", "file": "cd4_web.mp4", "type": "video", "date": "2026-07-13", "week": 14, "day": 6, "duration_sec": 1836.3}
+]
