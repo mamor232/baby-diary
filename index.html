@@ -10,7 +10,7 @@
     --bg:#fffdf6; --mint:#a9ddd0; --mint-soft:#e6f7f2;
     --coral:#ff9d85; --coral-soft:#ffe8e0; --yellow:#ffd873; --yellow-soft:#fff6df;
     --lavender:#c9bdf5; --lavender-soft:#f0ecff;
-    --ink:#4a4038; --ink-soft:#a89b8f; --card:#ffffff; --line:#f2ebe3;
+    --ink:#4a4038; --ink-soft:#a89b8f; --card:#ffffff; --line:#f0e8de;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
@@ -40,30 +40,28 @@
   .week-nav a{text-decoration:none;font-weight:600;font-size:13px;color:var(--ink);background:var(--card);border:2px solid var(--mint-soft);padding:7px 16px;border-radius:999px;transition:all .2s ease;}
   .week-nav a:hover{background:var(--mint);border-color:var(--mint);color:#fff;transform:translateY(-3px) rotate(-2deg);}
 
-  .highlight{max-width:640px;margin:34px auto 0;text-align:center;background:var(--card);padding:14px 14px 20px;border-radius:28px;box-shadow:0 10px 28px rgba(74,64,56,.12);transform:rotate(-1deg);}
-  .highlight img{width:100%;border-radius:18px;box-shadow:0 4px 14px rgba(74,64,56,.10);}
-  .highlight .cap{margin-top:10px;font-size:14.5px;color:var(--ink);font-family:'Gaegu','Pretendard',sans-serif;}
-
   .note{max-width:640px;margin:26px auto 0;padding:12px 18px;background:var(--yellow-soft);border-radius:14px;font-size:12px;color:#8a6a2a;text-align:center;}
 
-  /* calendar */
-  .calendar-wrap{max-width:380px;margin:34px auto 0;}
-  .calendar-card{background:var(--card);border-radius:24px;padding:18px 16px 20px;box-shadow:0 10px 28px rgba(74,64,56,.12);}
-  .calendar-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
-  .calendar-title{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:16px;color:var(--ink);}
-  .cal-nav{background:var(--mint-soft);border:none;width:30px;height:30px;border-radius:50%;font-size:16px;color:var(--ink);cursor:pointer;line-height:1;}
+  /* calendar (now the main hero visual) */
+  .calendar-wrap{max-width:600px;margin:34px auto 0;}
+  .calendar-card{background:var(--card);border-radius:30px;padding:26px 26px 30px;box-shadow:0 14px 34px rgba(74,64,56,.14);}
+  .calendar-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+  .calendar-title{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:22px;color:var(--ink);}
+  .cal-nav{background:var(--mint-soft);border:none;width:38px;height:38px;border-radius:50%;font-size:19px;color:var(--ink);cursor:pointer;line-height:1;}
   .cal-nav:hover{background:var(--mint);color:#fff;}
-  .calendar-weekdays{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;font-size:11px;color:var(--ink-soft);margin-bottom:6px;}
-  .calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
-  .cal-cell{aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;border-radius:10px;position:relative;padding-top:4px;}
+  .calendar-weekdays{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:10px;}
+  .calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;}
+  .cal-cell{aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;border-radius:14px;position:relative;padding-top:6px;}
   .cal-cell.empty{visibility:hidden;}
-  .cal-num{font-size:11px;color:var(--ink-soft);}
+  .cal-num{font-size:12.5px;color:var(--ink-soft);}
   .cal-cell.today .cal-num{color:var(--coral);font-weight:700;}
+  .cal-cell.today{background:var(--mint-soft);}
   .cal-cell.due{background:var(--coral-soft);}
   .cal-cell.has-photo{cursor:pointer;}
-  .cal-thumb{width:26px;height:26px;border-radius:50%;overflow:hidden;background:var(--mint-soft);display:flex;align-items:center;justify-content:center;font-size:13px;margin-top:2px;position:relative;box-shadow:0 2px 6px rgba(74,64,56,.15);}
+  .cal-thumb{width:40px;height:40px;border-radius:50%;overflow:hidden;background:var(--mint-soft);display:flex;align-items:center;justify-content:center;font-size:18px;margin-top:4px;position:relative;box-shadow:0 3px 8px rgba(74,64,56,.18);transition:transform .15s ease;}
+  .cal-cell.has-photo:hover .cal-thumb{transform:scale(1.12);}
   .cal-thumb img{width:100%;height:100%;object-fit:cover;}
-  .cal-badge{position:absolute;bottom:-4px;right:-4px;background:var(--coral);color:#fff;font-size:8px;font-weight:700;border-radius:999px;padding:1px 4px;line-height:1.2;}
+  .cal-badge{position:absolute;bottom:-4px;right:-6px;background:var(--coral);color:#fff;font-size:9.5px;font-weight:700;border-radius:999px;padding:2px 5px;line-height:1.2;}
 
   .day-panel{position:fixed;inset:0;background:rgba(20,15,12,.7);display:none;align-items:center;justify-content:center;z-index:998;padding:24px;}
   .day-panel.open{display:flex;}
@@ -75,11 +73,10 @@
   .day-panel-item img{width:100%;height:100%;object-fit:cover;}
 
   main{max-width:900px;margin:0 auto;padding:48px 20px 90px;}
-  .week-block{margin-bottom:60px;scroll-margin-top:30px;}
-  .week-header{display:flex;align-items:center;gap:12px;margin-bottom:22px;}
+  .week-block{margin-bottom:56px;scroll-margin-top:30px;}
+  .week-header{display:flex;align-items:center;gap:12px;margin-bottom:24px;padding-bottom:16px;border-bottom:2px solid var(--line);}
   .week-icon{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;border:3px solid #fff;box-shadow:0 3px 8px rgba(74,64,56,.14);}
-  .week-header h2{font-size:19px;margin:0;position:relative;padding-bottom:6px;}
-  .week-header h2::after{content:'';display:block;width:38px;height:3px;margin-top:5px;border-radius:2px;background:repeating-linear-gradient(90deg,var(--coral) 0 6px, transparent 6px 10px);}
+  .week-header h2{font-size:19px;margin:0;}
   .date-tag{font-size:12px;font-weight:600;color:#fff;background:var(--coral);padding:5px 13px;border-radius:999px;margin-left:auto;}
 
   .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px 16px;}
@@ -94,6 +91,7 @@
   .cap-date{display:block;font-family:'Gaegu','Pretendard',sans-serif;font-size:12px;color:var(--ink-soft);}
   .cap-label{display:block;font-family:'Gaegu','Pretendard',sans-serif;font-size:14.5px;font-weight:700;color:var(--ink);margin-top:2px;}
   .sticker{position:absolute;top:-12px;right:-8px;font-size:24px;filter:drop-shadow(0 2px 3px rgba(0,0,0,.18));transform:rotate(14deg);z-index:2;}
+  .count-badge{position:absolute;top:8px;left:8px;background:rgba(20,15,12,.55);color:#fff;font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:999px;z-index:2;}
 
   /* video cards */
   .video-card{grid-column:span 3;background:linear-gradient(135deg,var(--mint-soft),var(--lavender-soft));padding:12px;border-radius:24px;box-shadow:0 6px 18px rgba(74,64,56,.10);}
@@ -108,11 +106,17 @@
 
   .lightbox{position:fixed;inset:0;background:rgba(20,15,12,.88);display:none;align-items:center;justify-content:center;z-index:999;padding:24px;}
   .lightbox.open{display:flex;}
-  .lightbox-close{position:absolute;top:20px;right:24px;color:#fff;font-size:32px;font-weight:700;cursor:pointer;line-height:1;background:rgba(255,255,255,.15);width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:2;}
+  .lightbox-close{position:absolute;top:20px;right:24px;color:#fff;font-size:32px;font-weight:700;cursor:pointer;line-height:1;background:rgba(255,255,255,.15);width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:3;}
   .lightbox-close:hover{background:rgba(255,255,255,.3);}
   .lightbox-inner{display:flex;flex-direction:column;max-width:520px;width:100%;max-height:92vh;}
-  .lightbox-inner img{max-width:100%;max-height:58vh;border-radius:16px 16px 0 0;box-shadow:0 12px 40px rgba(0,0,0,.4);object-fit:contain;background:#000;}
+  .lightbox-media{position:relative;}
+  .lightbox-inner img{max-width:100%;max-height:58vh;border-radius:16px 16px 0 0;box-shadow:0 12px 40px rgba(0,0,0,.4);object-fit:contain;background:#000;display:block;width:100%;user-select:none;touch-action:pan-y;}
   .lightbox-inner img[src=""]{display:none;}
+  .lb-arrow{position:absolute;top:50%;transform:translateY(-50%);background:rgba(20,15,12,.5);color:#fff;border:none;width:38px;height:38px;border-radius:50%;font-size:19px;cursor:pointer;display:none;align-items:center;justify-content:center;z-index:2;}
+  .lb-arrow:hover{background:rgba(20,15,12,.75);}
+  .lb-prev{left:10px;}
+  .lb-next{right:10px;}
+  .lb-counter{position:absolute;top:12px;left:50%;transform:translateX(-50%);background:rgba(20,15,12,.5);color:#fff;font-size:11.5px;font-weight:600;padding:4px 12px;border-radius:999px;display:none;z-index:2;}
   .comment-box{background:var(--card);border-radius:0 0 20px 20px;padding:14px 16px 16px;display:flex;flex-direction:column;gap:10px;max-height:34vh;}
   .comment-box.no-image{border-radius:20px;max-height:60vh;}
   .comment-list{overflow-y:auto;display:flex;flex-direction:column;gap:8px;flex:1;min-height:40px;}
@@ -148,10 +152,6 @@
   <div class="week-nav">
     <a href="#w5-6">5주6일</a><a href="#w6-6">6주6일</a><a href="#w8-0">8주0일</a><a href="#w13-6">13주6일</a><a href="#w14-6">14주6일</a>
   </div>
-  <div class="highlight">
-    <img src="timeline_5w_13w.gif" alt="지금까지의 여정">
-    <div class="cap">5주 6일 ~ 13주 6일, 지금까지의 여정</div>
-  </div>
 
   <div class="calendar-wrap">
     <div class="calendar-card">
@@ -179,8 +179,9 @@
         
         <div class="card photo-card" style="--rot:-2deg;">
           <span class="sticker">🌸</span>
+          
           <div class="photo-wrap">
-            <img src="KakaoTalk_20260713_205238328_04_web.jpg" alt="2026-05-11" loading="lazy" onclick="openLightbox('KakaoTalk_20260713_205238328_04_web.jpg','KakaoTalk_20260713_205238328_04_web.jpg',false)">
+            <img src="KakaoTalk_20260713_205238328_04_web.jpg" alt="2026-05-11" loading="lazy" onclick="openPhotoLightbox('2026-05-11',0)">
           </div>
           <div class="polaroid-cap">
             <span class="cap-date">2026-05-11</span>
@@ -199,8 +200,9 @@
         
         <div class="card photo-card" style="--rot:1.5deg;">
           <span class="sticker">⭐</span>
+          
           <div class="photo-wrap">
-            <img src="KakaoTalk_20260713_205238328_03_web.jpg" alt="2026-05-18" loading="lazy" onclick="openLightbox('KakaoTalk_20260713_205238328_03_web.jpg','KakaoTalk_20260713_205238328_03_web.jpg',false)">
+            <img src="KakaoTalk_20260713_205238328_03_web.jpg" alt="2026-05-18" loading="lazy" onclick="openPhotoLightbox('2026-05-18',0)">
           </div>
           <div class="polaroid-cap">
             <span class="cap-date">2026-05-18</span>
@@ -219,8 +221,9 @@
         
         <div class="card photo-card" style="--rot:-1deg;">
           <span class="sticker">🎀</span>
+          
           <div class="photo-wrap">
-            <img src="KakaoTalk_20260713_205238328_02_web.jpg" alt="2026-05-26" loading="lazy" onclick="openLightbox('KakaoTalk_20260713_205238328_02_web.jpg','KakaoTalk_20260713_205238328_02_web.jpg',false)">
+            <img src="KakaoTalk_20260713_205238328_02_web.jpg" alt="2026-05-26" loading="lazy" onclick="openPhotoLightbox('2026-05-26',0)">
           </div>
           <div class="polaroid-cap">
             <span class="cap-date">2026-05-26</span>
@@ -239,8 +242,9 @@
         
         <div class="card photo-card" style="--rot:-2deg;">
           <span class="sticker">💛</span>
+          <span class="count-badge">1/2</span>
           <div class="photo-wrap">
-            <img src="KakaoTalk_20260713_205238328_01_web.jpg" alt="2026-07-06" loading="lazy" onclick="openLightbox('KakaoTalk_20260713_205238328_01_web.jpg','KakaoTalk_20260713_205238328_01_web.jpg',false)">
+            <img src="KakaoTalk_20260713_205238328_01_web.jpg" alt="2026-07-06" loading="lazy" onclick="openPhotoLightbox('2026-07-06',0)">
           </div>
           <div class="polaroid-cap">
             <span class="cap-date">2026-07-06</span>
@@ -249,8 +253,9 @@
         </div>
         <div class="card photo-card" style="--rot:1.5deg;">
           <span class="sticker">🍼</span>
+          <span class="count-badge">2/2</span>
           <div class="photo-wrap">
-            <img src="KakaoTalk_20260713_205238328_web.jpg" alt="2026-07-06" loading="lazy" onclick="openLightbox('KakaoTalk_20260713_205238328_web.jpg','KakaoTalk_20260713_205238328_web.jpg',false)">
+            <img src="KakaoTalk_20260713_205238328_web.jpg" alt="2026-07-06" loading="lazy" onclick="openPhotoLightbox('2026-07-06',1)">
           </div>
           <div class="polaroid-cap">
             <span class="cap-date">2026-07-06</span>
@@ -276,7 +281,7 @@
           <div class="video-meta">
             <span class="cap-date">2026-07-13</span>
             <span class="cap-label">🎬 영상 · 5:46</span>
-            <span class="comment-chip" onclick="openLightbox('','cd_web.mp4',true)">💬 댓글 남기기</span>
+            <span class="comment-chip" onclick="openVideoLightbox('cd_web.mp4')">💬 댓글 남기기</span>
           </div>
         </div>
         <div class="card wide video-card">
@@ -288,7 +293,7 @@
           <div class="video-meta">
             <span class="cap-date">2026-07-13</span>
             <span class="cap-label">🎬 영상 · 3:23</span>
-            <span class="comment-chip" onclick="openLightbox('','cd2_web.mp4',true)">💬 댓글 남기기</span>
+            <span class="comment-chip" onclick="openVideoLightbox('cd2_web.mp4')">💬 댓글 남기기</span>
           </div>
         </div>
         <div class="card wide video-card">
@@ -300,7 +305,7 @@
           <div class="video-meta">
             <span class="cap-date">2026-07-13</span>
             <span class="cap-label">🎬 영상 · 2:25</span>
-            <span class="comment-chip" onclick="openLightbox('','cd3_web.mp4',true)">💬 댓글 남기기</span>
+            <span class="comment-chip" onclick="openVideoLightbox('cd3_web.mp4')">💬 댓글 남기기</span>
           </div>
         </div>
         <div class="card wide video-card">
@@ -312,7 +317,7 @@
           <div class="video-meta">
             <span class="cap-date">2026-07-13</span>
             <span class="cap-label">🎬 영상 · 30:36</span>
-            <span class="comment-chip" onclick="openLightbox('','cd4_web.mp4',true)">💬 댓글 남기기</span>
+            <span class="comment-chip" onclick="openVideoLightbox('cd4_web.mp4')">💬 댓글 남기기</span>
           </div>
         </div>
       </div>
@@ -335,7 +340,12 @@
 <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
   <div class="lightbox-close" onclick="closeLightbox(event)">&times;</div>
   <div class="lightbox-inner" onclick="event.stopPropagation()">
-    <img id="lightbox-img" src="" alt="확대 이미지">
+    <div class="lightbox-media" id="lightbox-media">
+      <span class="lb-counter" id="lb-counter"></span>
+      <img id="lightbox-img" src="" alt="확대 이미지">
+      <button class="lb-arrow lb-prev" id="lb-prev" onclick="lightboxPrev()">‹</button>
+      <button class="lb-arrow lb-next" id="lb-next" onclick="lightboxNext()">›</button>
+    </div>
     <div class="comment-box" id="comment-box">
       <div class="comment-list" id="comment-list"></div>
       <form class="comment-form" id="comment-form">
@@ -375,21 +385,69 @@
   const savedName = localStorage.getItem('diary-commenter-name');
   if(savedName) document.getElementById('c-input-name').value = savedName;
 
-  /* ---------- Lightbox + comments ---------- */
-  let unsub = null;
+  /* ---------- Calendar data ---------- */
+  const CALENDAR_DATA = {"2026-05-11": [{"file": "KakaoTalk_20260713_205238328_04_web.jpg", "type": "photo"}], "2026-05-18": [{"file": "KakaoTalk_20260713_205238328_03_web.jpg", "type": "photo"}], "2026-05-26": [{"file": "KakaoTalk_20260713_205238328_02_web.jpg", "type": "photo"}], "2026-07-06": [{"file": "KakaoTalk_20260713_205238328_01_web.jpg", "type": "photo"}, {"file": "KakaoTalk_20260713_205238328_web.jpg", "type": "photo"}], "2026-07-13": [{"file": "cd_web.mp4", "type": "video"}, {"file": "cd2_web.mp4", "type": "video"}, {"file": "cd3_web.mp4", "type": "video"}, {"file": "cd4_web.mp4", "type": "video"}]};
 
-  window.openLightbox = function(src, photoId, isVideo){
-    const img = document.getElementById('lightbox-img');
-    const box = document.getElementById('comment-box');
-    if(isVideo){
-      img.src = '';
-      box.classList.add('no-image');
+  function photosForDate(dateStr){
+    return (CALENDAR_DATA[dateStr] || []).filter(it => it.type === 'photo');
+  }
+
+  /* ---------- Lightbox (photo gallery + video) ---------- */
+  let unsub = null;
+  let currentGallery = [];
+  let currentIndex = 0;
+  let currentMode = 'photo'; // 'photo' | 'video'
+
+  function updateArrows(){
+    const show = currentMode === 'photo' && currentGallery.length > 1;
+    document.getElementById('lb-prev').style.display = show ? 'flex' : 'none';
+    document.getElementById('lb-next').style.display = show ? 'flex' : 'none';
+    const counter = document.getElementById('lb-counter');
+    if(show){
+      counter.style.display = 'block';
+      counter.textContent = `${currentIndex + 1} / ${currentGallery.length}`;
     } else {
-      img.src = src;
-      box.classList.remove('no-image');
+      counter.style.display = 'none';
     }
+  }
+
+  function showCurrentPhoto(){
+    const item = currentGallery[currentIndex];
+    if(!item) return;
+    document.getElementById('lightbox-img').src = item.file;
+    document.getElementById('comment-box').classList.remove('no-image');
+    updateArrows();
+    loadComments(item.file);
+  }
+
+  window.openPhotoLightbox = function(dateStr, idx){
+    currentMode = 'photo';
+    currentGallery = photosForDate(dateStr);
+    currentIndex = Math.max(0, Math.min(idx, currentGallery.length - 1));
     document.getElementById('lightbox').classList.add('open');
-    loadComments(photoId);
+    showCurrentPhoto();
+  };
+
+  window.openVideoLightbox = function(file){
+    currentMode = 'video';
+    currentGallery = [];
+    document.getElementById('lightbox-img').src = '';
+    document.getElementById('comment-box').classList.add('no-image');
+    updateArrows();
+    document.getElementById('lightbox').classList.add('open');
+    loadComments(file);
+  };
+
+  window.lightboxPrev = function(){
+    if(currentMode !== 'photo' || currentGallery.length < 2) return;
+    currentIndex = (currentIndex - 1 + currentGallery.length) % currentGallery.length;
+    showCurrentPhoto();
+  };
+
+  window.lightboxNext = function(){
+    if(currentMode !== 'photo' || currentGallery.length < 2) return;
+    currentIndex = (currentIndex + 1) % currentGallery.length;
+    showCurrentPhoto();
   };
 
   window.closeLightbox = function(e){
@@ -400,12 +458,32 @@
   };
 
   document.addEventListener('keydown', (e) => {
+    const lbOpen = document.getElementById('lightbox').classList.contains('open');
     if(e.key === 'Escape'){
       document.getElementById('lightbox').classList.remove('open');
       document.getElementById('day-panel').classList.remove('open');
       if(unsub){ unsub(); unsub = null; }
+    } else if(lbOpen && e.key === 'ArrowLeft'){
+      lightboxPrev();
+    } else if(lbOpen && e.key === 'ArrowRight'){
+      lightboxNext();
     }
   });
+
+  /* swipe support */
+  let touchStartX = null;
+  const mediaEl = document.getElementById('lightbox-media');
+  mediaEl.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].clientX;
+  }, {passive: true});
+  mediaEl.addEventListener('touchend', (e) => {
+    if(touchStartX === null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if(Math.abs(dx) > 45){
+      if(dx > 0) lightboxPrev(); else lightboxNext();
+    }
+    touchStartX = null;
+  }, {passive: true});
 
   function fmtTime(ts){
     if(!ts || !ts.toDate) return '';
@@ -529,9 +607,7 @@
     }
   });
 
-  /* ---------- Calendar ---------- */
-  const CALENDAR_DATA = {"2026-05-11": [{"file": "KakaoTalk_20260713_205238328_04_web.jpg", "type": "photo"}], "2026-05-18": [{"file": "KakaoTalk_20260713_205238328_03_web.jpg", "type": "photo"}], "2026-05-26": [{"file": "KakaoTalk_20260713_205238328_02_web.jpg", "type": "photo"}], "2026-07-06": [{"file": "KakaoTalk_20260713_205238328_01_web.jpg", "type": "photo"}, {"file": "KakaoTalk_20260713_205238328_web.jpg", "type": "photo"}], "2026-07-13": [{"file": "cd_web.mp4", "type": "video"}, {"file": "cd2_web.mp4", "type": "video"}, {"file": "cd3_web.mp4", "type": "video"}, {"file": "cd4_web.mp4", "type": "video"}]};
-
+  /* ---------- Calendar render ---------- */
   function pad(n){ return String(n).padStart(2,'0'); }
 
   const dateKeys = Object.keys(CALENDAR_DATA).sort();
@@ -604,19 +680,22 @@
     document.getElementById('day-panel-title').textContent = dateStr;
     const grid = document.getElementById('day-panel-grid');
     grid.innerHTML = '';
+    let photoIdx = 0;
     items.forEach(it => {
       const cell = document.createElement('div');
       cell.className = 'day-panel-item';
       if(it.type === 'photo'){
+        const thisIdx = photoIdx;
+        photoIdx += 1;
         const img = document.createElement('img');
         img.src = it.file;
         img.loading = 'lazy';
         cell.appendChild(img);
-        cell.addEventListener('click', () => { closeDayPanel(); openLightbox(it.file, it.file, false); });
+        cell.addEventListener('click', () => { closeDayPanel(); openPhotoLightbox(dateStr, thisIdx); });
       } else {
         cell.classList.add('is-video');
         cell.textContent = '🎬 영상';
-        cell.addEventListener('click', () => { closeDayPanel(); openLightbox('', it.file, true); });
+        cell.addEventListener('click', () => { closeDayPanel(); openVideoLightbox(it.file); });
       }
       grid.appendChild(cell);
     });
