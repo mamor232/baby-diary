@@ -23,8 +23,8 @@ jobs:
       - name: Install system + python dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y ffmpeg
-          pip install requests pillow
+          sudo apt-get install -y ffmpeg tesseract-ocr
+          pip install requests pillow numpy
 
       - name: Run NAS sync script
         env:
