@@ -192,10 +192,24 @@ def process_video(name, local_path, manifest):
         "-movflags", "+faststart", "-c:a", "aac", "-b:a", "96k", web_name,
     ], check=True)
 
+    # Thumbnail image so videos can show a small photo-style card in the
+    # timeline (like photos) instead of a large embedded player -- the
+    # full video only appears when the user taps into the lightbox.
+    poster_name = name.rsplit(".", 1)[0] + "_poster.jpg"
+    try:
+        subprocess.run([
+            "ffmpeg", "-y", "-ss", "1", "-i", local_path,
+            "-vframes", "1", "-vf", "scale=480:-2", poster_name,
+        ], capture_output=True, timeout=30)
+        if not os.path.exists(poster_name):
+            poster_name = ""
+    except Exception:
+        poster_name = ""
+
     manifest.append({
         "source_file": name, "file": web_name, "type": "video",
         "date": dt.date().isoformat(), "week": w, "day": d,
-        "duration_sec": dur,
+        "duration_sec": dur, "poster": poster_name,
     })
 
 
@@ -212,9 +226,18 @@ def build_site(manifest):
     def week_label(w, d):
         return f"임신 {w}주 {d}일"
 
-    nav_html, sections_html = [], []
+    nav_html = [f'<a href="#w{w}-{d}">{w}주{d}일</a>' for w, d in group_keys]
+    nav_joined = ''.join(nav_html)
+
+    # Main timeline renders newest-first and groups sections by calendar
+    # month inside a collapsible <details> block. This keeps the page
+    # navigable even after many months of photos/videos pile up -- only
+    # the most recent month is expanded by default.
+    group_keys_desc = list(reversed(group_keys))
+    month_buckets = []
+    current_month = None
     photo_counter = 0
-    for i, key in enumerate(group_keys):
+    for i, key in enumerate(group_keys_desc):
         w, d = key
         entries = groups[key]
         entries_photo = [e for e in entries if e["type"] == "photo"]
@@ -222,7 +245,6 @@ def build_site(manifest):
         date_str = entries[0]["date"]
         sec_id = f"w{w}-{d}"
         pastel = pastels[i % len(pastels)]
-        nav_html.append(f'<a href="#{sec_id}">{w}주{d}일</a>')
 
         cards = []
         n_photos = len(entries_photo)
@@ -246,21 +268,24 @@ def build_site(manifest):
         for e in entries_video:
             mins = int(e["duration_sec"] // 60)
             secs = int(e["duration_sec"] % 60)
+            rot = rotations[photo_counter % len(rotations)]
+            photo_counter += 1
+            poster = e.get("poster") or ""
+            thumb_html = (f'<img src="{poster}" alt="{date_str}" loading="lazy">'
+                          if poster else '<div class="video-fallback">🎬</div>')
             cards.append(f'''
-        <div class="card wide video-card">
-          <div class="video-frame">
-            <video controls preload="metadata" playsinline>
-              <source src="{e['file']}" type="video/mp4">
-            </video>
+        <div class="card photo-card" style="--rot:{rot}deg;">
+          <div class="photo-wrap" onclick="openVideoLightbox('{e['file']}')">
+            {thumb_html}
+            <span class="play-badge">▶</span>
           </div>
-          <div class="video-meta">
+          <div class="polaroid-cap">
             <span class="cap-date">{date_str}</span>
-            <span class="cap-label">🎬 영상 · {mins}:{secs:02d}</span>
-            <span class="comment-chip" onclick="openVideoLightbox('{e['file']}')">💬 댓글 남기기</span>
+            <span class="cap-label">🎬 영상 {mins}:{secs:02d}</span>
           </div>
         </div>''')
 
-        sections_html.append(f'''
+        section_html = f'''
     <section class="week-block" id="{sec_id}">
       <div class="week-header">
         <div class="week-icon" style="background:{pastel}">🤰</div>
@@ -270,10 +295,30 @@ def build_site(manifest):
       <div class="grid">
         {''.join(cards)}
       </div>
-    </section>''')
+    </section>'''
 
-    nav_joined = ''.join(nav_html)
-    sections_joined = ''.join(sections_html)
+        month_str = date_str[:7]
+        if month_str != current_month:
+            y, mo = month_str.split('-')
+            month_buckets.append({'label': f"{y}년 {int(mo)}월", 'sections': [], 'count': 0})
+            current_month = month_str
+        month_buckets[-1]['sections'].append(section_html)
+        month_buckets[-1]['count'] += len(entries)
+
+    month_blocks = []
+    for idx, mb in enumerate(month_buckets):
+        open_attr = ' open' if idx == 0 else ''
+        month_blocks.append(f'''
+    <details class="month-group"{open_attr}>
+      <summary>
+        <span class="month-title">{mb['label']}</span>
+        <span class="month-count">{mb['count']}건</span>
+      </summary>
+      <div class="month-body">
+        {''.join(mb['sections'])}
+      </div>
+    </details>''')
+    sections_joined = ''.join(month_blocks)
 
     calendar_data = defaultdict(list)
     for m in manifest:
@@ -325,15 +370,21 @@ def build_site(manifest):
   .note{{max-width:640px;margin:26px auto 0;padding:12px 18px;background:var(--yellow-soft);border-radius:14px;font-size:12px;color:#8a6a2a;text-align:center;}}
 
   /* calendar (now the main hero visual) */
-  .calendar-wrap{{max-width:600px;margin:34px auto 0;}}
-  .calendar-card{{background:var(--card);border-radius:30px;padding:26px 26px 30px;box-shadow:0 14px 34px rgba(74,64,56,.14);}}
+  .calendar-wrap{{max-width:600px;margin:34px auto 28px;}}
+  .calendar-card{{background:var(--card);border-radius:30px;padding:26px 26px 34px;box-shadow:0 14px 34px rgba(74,64,56,.14);overflow:visible;}}
   .calendar-header{{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}}
   .calendar-title{{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:22px;color:var(--ink);}}
   .cal-nav{{background:var(--mint-soft);border:none;width:38px;height:38px;border-radius:50%;font-size:19px;color:var(--ink);cursor:pointer;line-height:1;}}
   .cal-nav:hover{{background:var(--mint);color:#fff;}}
   .calendar-weekdays{{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:10px;}}
   .calendar-grid{{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;}}
-  .cal-cell{{aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;border-radius:14px;position:relative;padding-top:6px;}}
+  .cal-cell{{aspect-ratio:1;min-height:34px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;border-radius:14px;position:relative;padding-top:6px;}}
+  @media (max-width:420px){{
+    .calendar-grid{{gap:3px;}}
+    .cal-cell{{aspect-ratio:auto;height:40px;padding-top:4px;}}
+    .cal-thumb{{width:28px;height:28px;margin-top:2px;}}
+    .cal-num{{font-size:11px;}}
+  }}
   .cal-cell.empty{{visibility:hidden;}}
   .cal-num{{font-size:12.5px;color:var(--ink-soft);}}
   .cal-cell.today .cal-num{{color:var(--coral);font-weight:700;}}
@@ -355,6 +406,14 @@ def build_site(manifest):
   .day-panel-item img{{width:100%;height:100%;object-fit:cover;}}
 
   main{{max-width:900px;margin:0 auto;padding:48px 20px 90px;}}
+  details.month-group{{margin-bottom:20px;}}
+  details.month-group summary{{list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px;padding:14px 20px;background:var(--card);border-radius:16px;box-shadow:0 4px 12px rgba(74,64,56,.08);}}
+  details.month-group summary::-webkit-details-marker{{display:none;}}
+  details.month-group summary::before{{content:'▸';color:var(--coral);font-size:13px;transition:transform .2s ease;}}
+  details.month-group[open] summary::before{{transform:rotate(90deg);}}
+  details.month-group .month-title{{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:16px;color:var(--ink);}}
+  details.month-group .month-count{{margin-left:auto;font-size:12px;color:var(--ink-soft);font-weight:600;background:var(--mint-soft);padding:3px 10px;border-radius:999px;}}
+  details.month-group .month-body{{padding-top:20px;}}
   .week-block{{margin-bottom:56px;scroll-margin-top:30px;}}
   .week-header{{display:flex;align-items:center;gap:12px;margin-bottom:24px;padding-bottom:16px;border-bottom:2px solid var(--line);}}
   .week-icon{{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;border:3px solid #fff;box-shadow:0 3px 8px rgba(74,64,56,.14);}}
@@ -367,8 +426,10 @@ def build_site(manifest):
   /* photo polaroid cards */
   .photo-card{{position:relative;background:var(--card);border-radius:18px;padding:8px 8px 4px;box-shadow:0 6px 16px rgba(74,64,56,.12);transition:transform .3s ease, box-shadow .3s ease;transform:rotate(var(--rot,0deg));}}
   .photo-card:hover{{transform:translateY(-6px) scale(1.04) rotate(0deg);box-shadow:0 14px 26px rgba(74,64,56,.18);z-index:2;}}
-  .photo-wrap{{border-radius:12px;overflow:hidden;background:#000;}}
+  .photo-wrap{{position:relative;border-radius:12px;overflow:hidden;background:#000;}}
   .photo-card img{{width:100%;height:190px;object-fit:cover;display:block;cursor:zoom-in;}}
+  .video-fallback{{width:100%;height:190px;display:flex;align-items:center;justify-content:center;font-size:40px;background:#111;color:#fff;}}
+  .play-badge{{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:42px;height:42px;border-radius:50%;background:rgba(20,15,12,.55);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;pointer-events:none;}}
   .polaroid-cap{{text-align:center;padding:9px 4px 12px;}}
   .cap-date{{display:block;font-family:'Gaegu','Pretendard',sans-serif;font-size:12px;color:var(--ink-soft);}}
   .cap-label{{display:block;font-family:'Gaegu','Pretendard',sans-serif;font-size:14.5px;font-weight:700;color:var(--ink);margin-top:2px;}}
@@ -771,7 +832,8 @@ def build_site(manifest):
     grid.innerHTML = '';
     const firstDay = new Date(calYear, calMonth, 1).getDay();
     const daysInMonth = new Date(calYear, calMonth+1, 0).getDate();
-    const todayStr = new Date().toISOString().slice(0,10);
+    const _now = new Date();
+    const todayStr = `${{_now.getFullYear()}}-${{pad(_now.getMonth()+1)}}-${{pad(_now.getDate())}}`;
 
     for(let i=0;i<firstDay;i++){{
       const empty = document.createElement('div');
@@ -857,6 +919,18 @@ def build_site(manifest):
       document.getElementById('day-panel').classList.remove('open');
     }}
   }};
+
+  function openDetailsFor(id){{
+    const target = document.getElementById(id);
+    if(!target) return;
+    const details = target.closest('details');
+    if(details) details.open = true;
+  }}
+  document.querySelectorAll('.week-nav a').forEach(a => {{
+    a.addEventListener('click', () => openDetailsFor(a.getAttribute('href').slice(1)));
+  }});
+  if(location.hash) openDetailsFor(location.hash.slice(1));
+  window.addEventListener('hashchange', () => openDetailsFor(location.hash.slice(1)));
 
   renderCalendar();
 </script>
