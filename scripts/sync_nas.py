@@ -192,7 +192,7 @@ def build_site(manifest, gif_info):
         for e in entries_photo:
             cards.append(f'''
         <div class="card">
-          <img src="{e['file']}" alt="{date_str}" loading="lazy" onclick="openLightbox('{e['file']}')">
+          <img src="{e['file']}" alt="{date_str}" loading="lazy" onclick="openLightbox('{e['file']}','{e['file']}',false)">
           <div class="card-overlay"><div class="date">{date_str}</div><div class="label">초음파 사진</div></div>
         </div>''')
         for e in entries_video:
@@ -203,7 +203,7 @@ def build_site(manifest, gif_info):
           <video controls preload="metadata" playsinline>
             <source src="{e['file']}" type="video/mp4">
           </video>
-          <div class="card-overlay"><div class="date">{date_str}</div><div class="label">영상 · {mins}:{secs:02d}</div></div>
+          <div class="card-overlay"><div class="date">{date_str}</div><div class="label">영상 · {mins}:{secs:02d} <span class="comment-btn" onclick="openLightbox('','{e['file']}',true)">💬 댓글</span></div></div>
         </div>''')
 
         sections_html.append(f'''
@@ -271,14 +271,31 @@ def build_site(manifest, gif_info):
   .card img{{width:100%;height:220px;object-fit:cover;display:block;cursor:zoom-in;}}
   .card.wide video{{width:100%;display:block;max-height:480px;}}
   .card-overlay{{position:absolute;left:0;right:0;bottom:0;padding:10px 12px;background:linear-gradient(to top, rgba(20,15,12,.7), rgba(20,15,12,0));color:#fff;pointer-events:none;}}
-  .card.wide .card-overlay{{position:static;background:none;color:var(--ink-soft);padding:8px 2px 0;}}
+  .card.wide .card-overlay{{position:static;background:none;color:var(--ink-soft);padding:8px 2px 0;pointer-events:auto;}}
   .card-overlay .date{{font-size:11px;opacity:.9;}}
   .card-overlay .label{{font-size:13px;font-weight:600;}}
+  .comment-btn{{cursor:pointer;margin-left:8px;text-decoration:underline;pointer-events:auto;}}
   .lightbox{{position:fixed;inset:0;background:rgba(20,15,12,.88);display:none;align-items:center;justify-content:center;z-index:999;padding:24px;}}
   .lightbox.open{{display:flex;}}
-  .lightbox img{{max-width:100%;max-height:88vh;border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,.4);}}
-  .lightbox-close{{position:absolute;top:20px;right:24px;color:#fff;font-size:32px;font-weight:700;cursor:pointer;line-height:1;background:rgba(255,255,255,.15);width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;}}
+  .lightbox-close{{position:absolute;top:20px;right:24px;color:#fff;font-size:32px;font-weight:700;cursor:pointer;line-height:1;background:rgba(255,255,255,.15);width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:2;}}
   .lightbox-close:hover{{background:rgba(255,255,255,.3);}}
+  .lightbox-inner{{display:flex;flex-direction:column;max-width:520px;width:100%;max-height:92vh;}}
+  .lightbox-inner img{{max-width:100%;max-height:58vh;border-radius:16px 16px 0 0;box-shadow:0 12px 40px rgba(0,0,0,.4);object-fit:contain;background:#000;}}
+  .lightbox-inner img[src=""]{{display:none;}}
+  .comment-box{{background:var(--card);border-radius:0 0 20px 20px;padding:14px 16px 16px;display:flex;flex-direction:column;gap:10px;max-height:34vh;}}
+  .comment-box.no-image{{border-radius:20px;max-height:60vh;}}
+  .comment-list{{overflow-y:auto;display:flex;flex-direction:column;gap:8px;flex:1;min-height:40px;}}
+  .c-item{{background:var(--mint-soft);border-radius:12px;padding:8px 12px;font-size:13px;line-height:1.5;}}
+  .c-name{{font-weight:700;color:var(--coral);margin-right:6px;}}
+  .c-text{{color:var(--ink);word-break:break-word;}}
+  .c-empty, .c-loading{{color:var(--ink-soft);font-size:12.5px;text-align:center;padding:10px 0;}}
+  .comment-form{{display:flex;gap:6px;flex-wrap:wrap;}}
+  .comment-form input{{border:2px solid var(--mint-soft);border-radius:999px;padding:7px 12px;font-size:13px;font-family:inherit;outline:none;}}
+  .comment-form input:focus{{border-color:var(--mint);}}
+  .comment-form .c-input-name{{flex:0 0 76px;}}
+  .comment-form .c-input-text{{flex:1;min-width:120px;}}
+  .comment-form button{{background:var(--coral);color:#fff;border:none;border-radius:999px;padding:7px 16px;font-size:13px;font-weight:700;cursor:pointer;flex-shrink:0;}}
+  .comment-form button:disabled{{opacity:.5;}}
   footer{{text-align:center;padding:30px 24px 50px;color:var(--ink-soft);font-size:12px;}}
   footer strong{{color:var(--ink);}}
 </style>
@@ -297,7 +314,7 @@ def build_site(manifest, gif_info):
     <img src="{gif_name}" alt="지금까지의 여정">
     <div class="cap">{gif_caption}</div>
   </div>
-  <div class="note">🔒 이 페이지는 공개 링크입니다 · 가족 누구나 링크로 볼 수 있어요</div>
+  <div class="note">🔒 이 페이지는 공개 링크입니다 · 가족 누구나 링크로 볼 수 있고, 사진을 눌러 댓글을 남길 수 있어요</div>
 </div>
 <main>
   {sections_joined}
@@ -305,24 +322,128 @@ def build_site(manifest, gif_info):
 <footer>Pregnancy diary · 출산예정일 <strong>2027-01-05</strong> · 나스에 새 사진이 추가되면 12시간마다 자동으로 갱신됩니다</footer>
 <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
   <div class="lightbox-close" onclick="closeLightbox(event)">&times;</div>
-  <img id="lightbox-img" src="" alt="확대 이미지">
+  <div class="lightbox-inner" onclick="event.stopPropagation()">
+    <img id="lightbox-img" src="" alt="확대 이미지">
+    <div class="comment-box" id="comment-box">
+      <div class="comment-list" id="comment-list"></div>
+      <form class="comment-form" id="comment-form">
+        <input type="text" class="c-input-name" id="c-input-name" placeholder="이름" maxlength="20" required>
+        <input type="text" class="c-input-text" placeholder="댓글을 남겨보세요" maxlength="300" required>
+        <button type="submit">등록</button>
+      </form>
+    </div>
+  </div>
 </div>
-<script>
+<script type="module">
+  import {{ initializeApp }} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import {{ getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp }}
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  const firebaseConfig = {{
+    apiKey: "AIzaSyDjVPXOIBIQFvFBN7tSjw1hB6I4b-T7Uk",
+    authDomain: "baby-a52d3.firebaseapp.com",
+    projectId: "baby-a52d3",
+    storageBucket: "baby-a52d3.firebasestorage.app",
+    messagingSenderId: "958352459153",
+    appId: "1:958352459153:web:c725156fc33e1de1578630"
+  }};
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
   const due = new Date("2027-01-05T00:00:00");
   const now = new Date();
   const diff = Math.ceil((due - now) / (1000*60*60*24));
   document.getElementById('dday').textContent = diff > 0 ? `D-${{diff}}` : (diff === 0 ? 'D-Day 🎉' : `출산 후 ${{-diff}}일`);
-  function openLightbox(src){{
-    document.getElementById('lightbox-img').src = src;
+
+  const savedName = localStorage.getItem('diary-commenter-name');
+  if(savedName) document.getElementById('c-input-name').value = savedName;
+
+  let unsub = null;
+
+  window.openLightbox = function(src, photoId, isVideo){{
+    const img = document.getElementById('lightbox-img');
+    const box = document.getElementById('comment-box');
+    if(isVideo){{
+      img.src = '';
+      box.classList.add('no-image');
+    }} else {{
+      img.src = src;
+      box.classList.remove('no-image');
+    }}
     document.getElementById('lightbox').classList.add('open');
-  }}
-  function closeLightbox(e){{
+    loadComments(photoId);
+  }};
+
+  window.closeLightbox = function(e){{
     if(e.target.id === 'lightbox' || e.target.classList.contains('lightbox-close')){{
       document.getElementById('lightbox').classList.remove('open');
+      if(unsub){{ unsub(); unsub = null; }}
     }}
-  }}
+  }};
+
   document.addEventListener('keydown', (e) => {{
-    if(e.key === 'Escape') document.getElementById('lightbox').classList.remove('open');
+    if(e.key === 'Escape'){{
+      document.getElementById('lightbox').classList.remove('open');
+      if(unsub){{ unsub(); unsub = null; }}
+    }}
+  }});
+
+  function loadComments(photoId){{
+    const list = document.getElementById('comment-list');
+    list.innerHTML = '<div class="c-loading">불러오는 중...</div>';
+    document.getElementById('comment-form').dataset.photoId = photoId;
+    if(unsub) unsub();
+    const q = query(collection(db, 'comments', photoId, 'items'), orderBy('createdAt', 'asc'));
+    unsub = onSnapshot(q, (snap) => {{
+      if(snap.empty){{
+        list.innerHTML = '<div class="c-empty">아직 댓글이 없어요. 첫 댓글을 남겨보세요 💌</div>';
+        return;
+      }}
+      list.innerHTML = '';
+      snap.forEach(doc => {{
+        const d = doc.data();
+        const item = document.createElement('div');
+        item.className = 'c-item';
+        const nameEl = document.createElement('span');
+        nameEl.className = 'c-name';
+        nameEl.textContent = d.name;
+        const textEl = document.createElement('span');
+        textEl.className = 'c-text';
+        textEl.textContent = d.text;
+        item.appendChild(nameEl);
+        item.appendChild(textEl);
+        list.appendChild(item);
+      }});
+      list.scrollTop = list.scrollHeight;
+    }}, (err) => {{
+      list.innerHTML = '<div class="c-empty">댓글을 불러오지 못했어요.</div>';
+      console.error(err);
+    }});
+  }}
+
+  document.getElementById('comment-form').addEventListener('submit', async (e) => {{
+    e.preventDefault();
+    const form = e.target;
+    const photoId = form.dataset.photoId;
+    const nameInput = form.querySelector('.c-input-name');
+    const textInput = form.querySelector('.c-input-text');
+    const name = nameInput.value.trim();
+    const text = textInput.value.trim();
+    if(!name || !text || !photoId) return;
+    const btn = form.querySelector('button');
+    btn.disabled = true;
+    try {{
+      await addDoc(collection(db, 'comments', photoId, 'items'), {{
+        name: name.slice(0, 20), text: text.slice(0, 300), createdAt: serverTimestamp()
+      }});
+      localStorage.setItem('diary-commenter-name', name);
+      textInput.value = '';
+    }} catch(err) {{
+      console.error(err);
+      alert('댓글 등록에 실패했어요. 잠시 후 다시 시도해주세요.');
+    }} finally {{
+      btn.disabled = false;
+    }}
   }});
 </script>
 </body>
@@ -359,16 +480,21 @@ def main():
             process_video(name, local_tmp, manifest)
         new_count += 1
 
-    if new_count == 0:
-        print("No new files found on NAS.")
-        return
+    if new_count > 0:
+        with open(MANIFEST_PATH, "w", encoding="utf-8") as f:
+            json.dump(manifest, f, ensure_ascii=False, indent=2)
 
-    with open(MANIFEST_PATH, "w", encoding="utf-8") as f:
-        json.dump(manifest, f, ensure_ascii=False, indent=2)
-
+    # Always rebuild the gif + site from the current manifest, even if no new
+    # files were found on the NAS. This keeps index.html in sync whenever the
+    # site template itself changes (e.g. new features), not just when photos
+    # are added.
     gif_info = build_gif(manifest)
     build_site(manifest, gif_info)
-    print(f"Processed {new_count} new file(s).")
+
+    if new_count == 0:
+        print("No new files found on NAS. Site regenerated from existing manifest.")
+    else:
+        print(f"Processed {new_count} new file(s).")
 
 
 if __name__ == "__main__":
