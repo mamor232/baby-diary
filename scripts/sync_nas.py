@@ -240,6 +240,11 @@ def build_site(manifest, gif_info):
     sections_joined = ''.join(sections_html)
     gif_name, gif_caption = gif_info if gif_info else ("", "")
 
+    calendar_data = defaultdict(list)
+    for m in manifest:
+        calendar_data[m["date"]].append({"file": m["file"], "type": m["type"]})
+    calendar_json = json.dumps(dict(calendar_data), ensure_ascii=False)
+
     html = f'''<!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -288,6 +293,34 @@ def build_site(manifest, gif_info):
 
   .note{{max-width:640px;margin:26px auto 0;padding:12px 18px;background:var(--yellow-soft);border-radius:14px;font-size:12px;color:#8a6a2a;text-align:center;}}
 
+  /* calendar */
+  .calendar-wrap{{max-width:380px;margin:34px auto 0;}}
+  .calendar-card{{background:var(--card);border-radius:24px;padding:18px 16px 20px;box-shadow:0 10px 28px rgba(74,64,56,.12);}}
+  .calendar-header{{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}}
+  .calendar-title{{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:16px;color:var(--ink);}}
+  .cal-nav{{background:var(--mint-soft);border:none;width:30px;height:30px;border-radius:50%;font-size:16px;color:var(--ink);cursor:pointer;line-height:1;}}
+  .cal-nav:hover{{background:var(--mint);color:#fff;}}
+  .calendar-weekdays{{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;font-size:11px;color:var(--ink-soft);margin-bottom:6px;}}
+  .calendar-grid{{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}}
+  .cal-cell{{aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;border-radius:10px;position:relative;padding-top:4px;}}
+  .cal-cell.empty{{visibility:hidden;}}
+  .cal-num{{font-size:11px;color:var(--ink-soft);}}
+  .cal-cell.today .cal-num{{color:var(--coral);font-weight:700;}}
+  .cal-cell.due{{background:var(--coral-soft);}}
+  .cal-cell.has-photo{{cursor:pointer;}}
+  .cal-thumb{{width:26px;height:26px;border-radius:50%;overflow:hidden;background:var(--mint-soft);display:flex;align-items:center;justify-content:center;font-size:13px;margin-top:2px;position:relative;box-shadow:0 2px 6px rgba(74,64,56,.15);}}
+  .cal-thumb img{{width:100%;height:100%;object-fit:cover;}}
+  .cal-badge{{position:absolute;bottom:-4px;right:-4px;background:var(--coral);color:#fff;font-size:8px;font-weight:700;border-radius:999px;padding:1px 4px;line-height:1.2;}}
+
+  .day-panel{{position:fixed;inset:0;background:rgba(20,15,12,.7);display:none;align-items:center;justify-content:center;z-index:998;padding:24px;}}
+  .day-panel.open{{display:flex;}}
+  .day-panel-inner{{background:var(--card);border-radius:22px;padding:20px;max-width:420px;width:100%;max-height:80vh;overflow-y:auto;position:relative;}}
+  .day-panel-close{{position:absolute;top:14px;right:16px;cursor:pointer;font-size:22px;color:var(--ink-soft);}}
+  .day-panel-inner h3{{margin:0 0 14px;font-family:'Baloo 2',sans-serif;font-size:16px;}}
+  .day-panel-grid{{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}}
+  .day-panel-item{{border-radius:12px;overflow:hidden;cursor:pointer;aspect-ratio:1;background:var(--mint-soft);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--ink);}}
+  .day-panel-item img{{width:100%;height:100%;object-fit:cover;}}
+
   main{{max-width:900px;margin:0 auto;padding:48px 20px 90px;}}
   .week-block{{margin-bottom:60px;scroll-margin-top:30px;}}
   .week-header{{display:flex;align-items:center;gap:12px;margin-bottom:22px;}}
@@ -330,9 +363,12 @@ def build_site(manifest, gif_info):
   .comment-box{{background:var(--card);border-radius:0 0 20px 20px;padding:14px 16px 16px;display:flex;flex-direction:column;gap:10px;max-height:34vh;}}
   .comment-box.no-image{{border-radius:20px;max-height:60vh;}}
   .comment-list{{overflow-y:auto;display:flex;flex-direction:column;gap:8px;flex:1;min-height:40px;}}
-  .c-item{{max-width:82%;background:var(--mint-soft);border-radius:14px 14px 14px 4px;padding:8px 12px;font-size:13.5px;line-height:1.5;font-family:'Gaegu','Pretendard',sans-serif;}}
+  .c-item{{max-width:88%;background:var(--mint-soft);border-radius:14px 14px 14px 4px;padding:8px 12px;font-size:13.5px;line-height:1.5;font-family:'Gaegu','Pretendard',sans-serif;}}
   .c-item:nth-child(even){{background:var(--coral-soft);align-self:flex-end;border-radius:14px 14px 4px 14px;}}
-  .c-name{{font-family:'Pretendard',sans-serif;font-weight:700;color:var(--coral);margin-right:6px;font-size:12px;}}
+  .c-meta{{display:flex;justify-content:space-between;align-items:baseline;gap:8px;}}
+  .c-name{{font-family:'Pretendard',sans-serif;font-weight:700;color:var(--coral);font-size:12px;}}
+  .c-time{{font-size:10px;color:var(--ink-soft);font-family:'Pretendard',sans-serif;white-space:nowrap;}}
+  .c-del{{font-size:10px;color:var(--coral);cursor:pointer;text-decoration:underline;margin-left:6px;font-family:'Pretendard',sans-serif;}}
   .c-text{{color:var(--ink);word-break:break-word;}}
   .c-empty, .c-loading{{color:var(--ink-soft);font-size:12.5px;text-align:center;padding:10px 0;font-family:'Gaegu','Pretendard',sans-serif;}}
   .comment-form{{display:flex;gap:6px;flex-wrap:wrap;}}
@@ -346,6 +382,7 @@ def build_site(manifest, gif_info):
   footer{{text-align:center;padding:34px 24px 54px;color:var(--ink-soft);font-size:12px;}}
   footer .divider{{font-size:16px;letter-spacing:8px;color:var(--mint);margin-bottom:12px;opacity:.9;}}
   footer strong{{color:var(--ink);}}
+  .admin-link{{display:inline-block;margin-top:12px;font-size:11px;color:var(--ink-soft);cursor:pointer;text-decoration:underline;}}
 </style>
 </head>
 <body>
@@ -362,6 +399,19 @@ def build_site(manifest, gif_info):
     <img src="{gif_name}" alt="지금까지의 여정">
     <div class="cap">{gif_caption}</div>
   </div>
+
+  <div class="calendar-wrap">
+    <div class="calendar-card">
+      <div class="calendar-header">
+        <button class="cal-nav" onclick="calShift(-1)">‹</button>
+        <div class="calendar-title" id="cal-title">-</div>
+        <button class="cal-nav" onclick="calShift(1)">›</button>
+      </div>
+      <div class="calendar-weekdays"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div>
+      <div class="calendar-grid" id="calendar-grid"></div>
+    </div>
+  </div>
+
   <div class="note">🔒 이 페이지는 공개 링크입니다 · 가족 누구나 링크로 볼 수 있고, 사진을 눌러 댓글을 남길 수 있어요</div>
 </div>
 <main>
@@ -370,7 +420,17 @@ def build_site(manifest, gif_info):
 <footer>
   <div class="divider">🍼 ⋯ ⭐ ⋯ 🧸</div>
   Pregnancy diary · 출산예정일 <strong>2027-01-05</strong> · 나스에 새 사진이 추가되면 12시간마다 자동으로 갱신됩니다
+  <div><span class="admin-link" id="admin-link">🔧 관리자 로그인</span></div>
 </footer>
+
+<div class="day-panel" id="day-panel" onclick="closeDayPanel(event)">
+  <div class="day-panel-inner" onclick="event.stopPropagation()">
+    <div class="day-panel-close" onclick="closeDayPanel(event)">&times;</div>
+    <h3 id="day-panel-title"></h3>
+    <div class="day-panel-grid" id="day-panel-grid"></div>
+  </div>
+</div>
+
 <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
   <div class="lightbox-close" onclick="closeLightbox(event)">&times;</div>
   <div class="lightbox-inner" onclick="event.stopPropagation()">
@@ -387,8 +447,10 @@ def build_site(manifest, gif_info):
 </div>
 <script type="module">
   import {{ initializeApp }} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import {{ getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp }}
+  import {{ getFirestore, collection, addDoc, deleteDoc, doc, query, orderBy, onSnapshot, serverTimestamp }}
     from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  import {{ getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut }}
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
   const firebaseConfig = {{
     apiKey: "AIzaSyDjVPXOIBIQFvFBN7tSjw1hB6I4b-T7Uk",
@@ -400,7 +462,10 @@ def build_site(manifest, gif_info):
   }};
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
+  const auth = getAuth(app);
+  let currentUser = null;
 
+  const DUE_DATE = "2027-01-05";
   const due = new Date("2027-01-05T00:00:00");
   const now = new Date();
   const diff = Math.ceil((due - now) / (1000*60*60*24));
@@ -409,6 +474,7 @@ def build_site(manifest, gif_info):
   const savedName = localStorage.getItem('diary-commenter-name');
   if(savedName) document.getElementById('c-input-name').value = savedName;
 
+  /* ---------- Lightbox + comments ---------- */
   let unsub = null;
 
   window.openLightbox = function(src, photoId, isVideo){{
@@ -435,9 +501,20 @@ def build_site(manifest, gif_info):
   document.addEventListener('keydown', (e) => {{
     if(e.key === 'Escape'){{
       document.getElementById('lightbox').classList.remove('open');
+      document.getElementById('day-panel').classList.remove('open');
       if(unsub){{ unsub(); unsub = null; }}
     }}
   }});
+
+  function fmtTime(ts){{
+    if(!ts || !ts.toDate) return '';
+    const d = ts.toDate();
+    const mm = String(d.getMonth()+1).padStart(2,'0');
+    const dd = String(d.getDate()).padStart(2,'0');
+    const hh = String(d.getHours()).padStart(2,'0');
+    const mi = String(d.getMinutes()).padStart(2,'0');
+    return `${{mm}}.${{dd}} ${{hh}}:${{mi}}`;
+  }}
 
   function loadComments(photoId){{
     const list = document.getElementById('comment-list');
@@ -451,17 +528,45 @@ def build_site(manifest, gif_info):
         return;
       }}
       list.innerHTML = '';
-      snap.forEach(doc => {{
-        const d = doc.data();
+      snap.forEach(docSnap => {{
+        const d = docSnap.data();
         const item = document.createElement('div');
         item.className = 'c-item';
+
+        const meta = document.createElement('div');
+        meta.className = 'c-meta';
         const nameEl = document.createElement('span');
         nameEl.className = 'c-name';
         nameEl.textContent = d.name;
-        const textEl = document.createElement('span');
+        meta.appendChild(nameEl);
+
+        const rightWrap = document.createElement('span');
+        const timeEl = document.createElement('span');
+        timeEl.className = 'c-time';
+        timeEl.textContent = fmtTime(d.createdAt);
+        rightWrap.appendChild(timeEl);
+        if(currentUser){{
+          const delEl = document.createElement('span');
+          delEl.className = 'c-del';
+          delEl.textContent = '삭제';
+          delEl.addEventListener('click', async () => {{
+            if(confirm('이 댓글을 삭제할까요?')){{
+              try {{
+                await deleteDoc(doc(db, 'comments', photoId, 'items', docSnap.id));
+              }} catch(err) {{
+                alert('삭제 실패: ' + err.message);
+              }}
+            }}
+          }});
+          rightWrap.appendChild(delEl);
+        }}
+        meta.appendChild(rightWrap);
+
+        const textEl = document.createElement('div');
         textEl.className = 'c-text';
         textEl.textContent = d.text;
-        item.appendChild(nameEl);
+
+        item.appendChild(meta);
         item.appendChild(textEl);
         list.appendChild(item);
       }});
@@ -496,6 +601,134 @@ def build_site(manifest, gif_info):
       btn.disabled = false;
     }}
   }});
+
+  /* ---------- Admin login ---------- */
+  document.getElementById('admin-link').addEventListener('click', async () => {{
+    if(currentUser){{
+      await signOut(auth);
+      return;
+    }}
+    const email = prompt('관리자 이메일');
+    if(!email) return;
+    const pw = prompt('비밀번호');
+    if(!pw) return;
+    try {{
+      await signInWithEmailAndPassword(auth, email, pw);
+    }} catch(err) {{
+      alert('로그인 실패: ' + err.message);
+    }}
+  }});
+
+  onAuthStateChanged(auth, (user) => {{
+    currentUser = user;
+    document.getElementById('admin-link').textContent = user ? '🔓 관리자 로그아웃' : '🔧 관리자 로그인';
+    const openPhotoId = document.getElementById('comment-form').dataset.photoId;
+    if(openPhotoId && document.getElementById('lightbox').classList.contains('open')){{
+      loadComments(openPhotoId);
+    }}
+  }});
+
+  /* ---------- Calendar ---------- */
+  const CALENDAR_DATA = {calendar_json};
+
+  function pad(n){{ return String(n).padStart(2,'0'); }}
+
+  const dateKeys = Object.keys(CALENDAR_DATA).sort();
+  const initDate = dateKeys.length ? new Date(dateKeys[dateKeys.length-1] + 'T00:00:00') : new Date();
+  let calYear = initDate.getFullYear();
+  let calMonth = initDate.getMonth();
+
+  function renderCalendar(){{
+    document.getElementById('cal-title').textContent = `${{calYear}}.${{pad(calMonth+1)}}`;
+    const grid = document.getElementById('calendar-grid');
+    grid.innerHTML = '';
+    const firstDay = new Date(calYear, calMonth, 1).getDay();
+    const daysInMonth = new Date(calYear, calMonth+1, 0).getDate();
+    const todayStr = new Date().toISOString().slice(0,10);
+
+    for(let i=0;i<firstDay;i++){{
+      const empty = document.createElement('div');
+      empty.className = 'cal-cell empty';
+      grid.appendChild(empty);
+    }}
+
+    for(let d=1; d<=daysInMonth; d++){{
+      const dateStr = `${{calYear}}-${{pad(calMonth+1)}}-${{pad(d)}}`;
+      const cell = document.createElement('div');
+      cell.className = 'cal-cell';
+      if(dateStr === DUE_DATE) cell.classList.add('due');
+      if(dateStr === todayStr) cell.classList.add('today');
+
+      const num = document.createElement('div');
+      num.className = 'cal-num';
+      num.textContent = d;
+      cell.appendChild(num);
+
+      const items = CALENDAR_DATA[dateStr];
+      if(items && items.length){{
+        cell.classList.add('has-photo');
+        const thumb = document.createElement('div');
+        thumb.className = 'cal-thumb';
+        const first = items[0];
+        if(first.type === 'photo'){{
+          const img = document.createElement('img');
+          img.src = first.file;
+          img.loading = 'lazy';
+          thumb.appendChild(img);
+        }} else {{
+          thumb.textContent = '🎬';
+        }}
+        if(items.length > 1){{
+          const badge = document.createElement('span');
+          badge.className = 'cal-badge';
+          badge.textContent = '+' + (items.length - 1);
+          thumb.appendChild(badge);
+        }}
+        cell.appendChild(thumb);
+        cell.addEventListener('click', () => openDayPanel(dateStr));
+      }}
+      grid.appendChild(cell);
+    }}
+  }}
+
+  window.calShift = function(delta){{
+    calMonth += delta;
+    if(calMonth < 0){{ calMonth = 11; calYear -= 1; }}
+    if(calMonth > 11){{ calMonth = 0; calYear += 1; }}
+    renderCalendar();
+  }};
+
+  function openDayPanel(dateStr){{
+    const items = CALENDAR_DATA[dateStr] || [];
+    document.getElementById('day-panel-title').textContent = dateStr;
+    const grid = document.getElementById('day-panel-grid');
+    grid.innerHTML = '';
+    items.forEach(it => {{
+      const cell = document.createElement('div');
+      cell.className = 'day-panel-item';
+      if(it.type === 'photo'){{
+        const img = document.createElement('img');
+        img.src = it.file;
+        img.loading = 'lazy';
+        cell.appendChild(img);
+        cell.addEventListener('click', () => {{ closeDayPanel(); openLightbox(it.file, it.file, false); }});
+      }} else {{
+        cell.classList.add('is-video');
+        cell.textContent = '🎬 영상';
+        cell.addEventListener('click', () => {{ closeDayPanel(); openLightbox('', it.file, true); }});
+      }}
+      grid.appendChild(cell);
+    }});
+    document.getElementById('day-panel').classList.add('open');
+  }}
+
+  window.closeDayPanel = function(e){{
+    if(!e || e.target.id === 'day-panel' || e.target.classList.contains('day-panel-close')){{
+      document.getElementById('day-panel').classList.remove('open');
+    }}
+  }};
+
+  renderCalendar();
 </script>
 </body>
 </html>
