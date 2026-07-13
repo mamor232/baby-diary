@@ -51,7 +51,8 @@
     "date": "2026-05-26",
     "week": 8,
     "day": 0,
-    "duration_sec": 346.967
+    "duration_sec": 346.967,
+    "poster": "cd_poster.jpg"
   },
   {
     "source_file": "cd2.mp4",
@@ -60,7 +61,8 @@
     "date": "2026-06-01",
     "week": 8,
     "day": 6,
-    "duration_sec": 203.767
+    "duration_sec": 203.767,
+    "poster": "cd2_poster.jpg"
   },
   {
     "source_file": "cd3.mp4",
@@ -69,7 +71,8 @@
     "date": "2026-06-08",
     "week": 9,
     "day": 6,
-    "duration_sec": 145.234
+    "duration_sec": 145.234,
+    "poster": "cd3_poster.jpg"
   },
   {
     "source_file": "cd4.mp4",
@@ -78,6 +81,7 @@
     "date": "2026-07-06",
     "week": 13,
     "day": 6,
-    "duration_sec": 1836.3
+    "duration_sec": 1836.3,
+    "poster": "cd4_poster.jpg"
   }
 ]
