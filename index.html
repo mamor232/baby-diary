@@ -5,52 +5,79 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>우리 아기 이야기 · 태담 다이어리</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Pretendard:wght@400;500;600;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Gaegu:wght@400;700&family=Pretendard:wght@400;500;600;700&display=swap');
   :root{
-    --bg:#fffdf9; --mint:#a9ddd0; --mint-soft:#e3f5f0;
-    --coral:#ff9d85; --coral-soft:#ffe4dc; --yellow:#ffd873; --yellow-soft:#fff3d6;
-    --ink:#4a4038; --ink-soft:#a39a91; --card:#ffffff; --line:#f2ebe3;
+    --bg:#fffdf6; --mint:#a9ddd0; --mint-soft:#e6f7f2;
+    --coral:#ff9d85; --coral-soft:#ffe8e0; --yellow:#ffd873; --yellow-soft:#fff6df;
+    --lavender:#c9bdf5; --lavender-soft:#f0ecff;
+    --ink:#4a4038; --ink-soft:#a89b8f; --card:#ffffff; --line:#f2ebe3;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
-  body{font-family:'Pretendard','Apple SD Gothic Neo',sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;}
+  body{
+    font-family:'Pretendard','Apple SD Gothic Neo',sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased;
+    background-color:var(--bg);
+    background-image:radial-gradient(circle at 18px 18px, rgba(169,221,208,.22) 2.5px, transparent 0);
+    background-size:36px 36px;
+  }
   .round-font{font-family:'Baloo 2','Pretendard',sans-serif;}
-  .hero{padding:56px 24px 40px;text-align:center;background:linear-gradient(180deg, var(--mint-soft) 0%, var(--bg) 78%);border-radius:0 0 40px 40px;position:relative;overflow:hidden;}
-  .hero .deco{position:absolute;font-size:28px;opacity:.55;animation:float 5s ease-in-out infinite;}
+  .hand-font{font-family:'Gaegu','Pretendard',sans-serif;}
+
+  .hero{padding:60px 24px 46px;text-align:center;background:linear-gradient(180deg, var(--mint-soft) 0%, var(--bg) 82%);border-radius:0 0 44px 44px;position:relative;overflow:hidden;}
+  .hero .deco{position:absolute;font-size:26px;opacity:.6;animation:float 5s ease-in-out infinite;}
   .hero .d1{top:20px;left:8%;} .hero .d2{top:60px;right:10%;animation-delay:1.2s;}
   .hero .d3{bottom:10px;left:20%;animation-delay:2s;} .hero .d4{bottom:30px;right:22%;animation-delay:.6s;}
+  .hero .d5{top:100px;left:44%;animation-delay:1.8s;font-size:20px;} .hero .d6{bottom:70px;right:6%;animation-delay:.9s;font-size:22px;}
   @keyframes float{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-10px) rotate(6deg);}}
-  .hero-badge{display:inline-block;background:var(--card);color:var(--coral);font-weight:700;font-size:12.5px;padding:6px 16px;border-radius:999px;box-shadow:0 4px 12px rgba(255,157,133,.25);margin-bottom:16px;}
-  .hero h1{font-family:'Baloo 2',sans-serif;font-size:clamp(26px,5vw,40px);font-weight:700;margin:0 0 10px;line-height:1.3;}
+  .hero-badge{display:inline-block;background:var(--card);color:var(--coral);font-weight:700;font-size:12.5px;padding:6px 16px;border-radius:999px;box-shadow:0 4px 12px rgba(255,157,133,.25);margin-bottom:16px;letter-spacing:.2px;}
+  .hero h1{font-family:'Baloo 2',sans-serif;font-size:clamp(26px,5vw,40px);font-weight:700;margin:0 0 10px;line-height:1.35;}
   .hero h1 .hl{color:var(--coral);}
-  .hero p{color:var(--ink-soft);font-size:14.5px;max-width:420px;margin:0 auto;line-height:1.6;}
-  .dday{display:inline-block;margin-top:18px;background:var(--card);border:2px solid var(--coral-soft);padding:8px 20px;border-radius:999px;font-weight:700;color:var(--coral);font-size:14px;}
+  .hero p{color:var(--ink-soft);font-size:14.5px;max-width:420px;margin:0 auto;line-height:1.6;font-family:'Gaegu','Pretendard',sans-serif;}
+  .dday{display:inline-block;margin-top:18px;background:var(--card);border:2px solid var(--coral-soft);padding:8px 22px;border-radius:999px;font-weight:700;color:var(--coral);font-size:14px;animation:pulseDday 2.6s ease-in-out infinite;}
+  @keyframes pulseDday{0%{box-shadow:0 0 0 0 rgba(255,157,133,.35);}70%{box-shadow:0 0 0 10px rgba(255,157,133,0);}100%{box-shadow:0 0 0 0 rgba(255,157,133,0);}}
+
   .week-nav{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:26px;}
   .week-nav a{text-decoration:none;font-weight:600;font-size:13px;color:var(--ink);background:var(--card);border:2px solid var(--mint-soft);padding:7px 16px;border-radius:999px;transition:all .2s ease;}
-  .week-nav a:hover{background:var(--mint);border-color:var(--mint);color:#fff;transform:translateY(-2px);}
-  .highlight{max-width:640px;margin:30px auto 0;text-align:center;}
-  .highlight img{width:100%;border-radius:24px;box-shadow:0 8px 24px rgba(74,64,56,.12);}
-  .highlight .cap{margin-top:10px;font-size:12.5px;color:var(--ink-soft);}
+  .week-nav a:hover{background:var(--mint);border-color:var(--mint);color:#fff;transform:translateY(-3px) rotate(-2deg);}
+
+  .highlight{max-width:640px;margin:34px auto 0;text-align:center;background:var(--card);padding:14px 14px 20px;border-radius:28px;box-shadow:0 10px 28px rgba(74,64,56,.12);transform:rotate(-1deg);}
+  .highlight img{width:100%;border-radius:18px;box-shadow:0 4px 14px rgba(74,64,56,.10);}
+  .highlight .cap{margin-top:10px;font-size:14.5px;color:var(--ink);font-family:'Gaegu','Pretendard',sans-serif;}
+
   .note{max-width:640px;margin:26px auto 0;padding:12px 18px;background:var(--yellow-soft);border-radius:14px;font-size:12px;color:#8a6a2a;text-align:center;}
-  main{max-width:900px;margin:0 auto;padding:44px 20px 90px;}
-  .week-block{margin-bottom:56px;scroll-margin-top:30px;}
-  .week-header{display:flex;align-items:center;gap:12px;margin-bottom:18px;}
-  .week-icon{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
-  .week-header h2{font-size:20px;margin:0;}
-  .date-tag{font-size:12px;font-weight:600;color:#fff;background:var(--coral);padding:4px 12px;border-radius:999px;margin-left:auto;}
-  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+
+  main{max-width:900px;margin:0 auto;padding:48px 20px 90px;}
+  .week-block{margin-bottom:60px;scroll-margin-top:30px;}
+  .week-header{display:flex;align-items:center;gap:12px;margin-bottom:22px;}
+  .week-icon{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;border:3px solid #fff;box-shadow:0 3px 8px rgba(74,64,56,.14);}
+  .week-header h2{font-size:19px;margin:0;position:relative;padding-bottom:6px;}
+  .week-header h2::after{content:'';display:block;width:38px;height:3px;margin-top:5px;border-radius:2px;background:repeating-linear-gradient(90deg,var(--coral) 0 6px, transparent 6px 10px);}
+  .date-tag{font-size:12px;font-weight:600;color:#fff;background:var(--coral);padding:5px 13px;border-radius:999px;margin-left:auto;}
+
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px 16px;}
   @media (max-width:640px){.grid{grid-template-columns:repeat(2,1fr);}}
-  .card{position:relative;border-radius:20px;overflow:hidden;box-shadow:0 4px 14px rgba(74,64,56,.08);transition:transform .3s ease;background:#000;}
-  .card:hover{transform:translateY(-4px) scale(1.02);}
-  .card.wide{grid-column:span 3;}
-  @media (max-width:640px){.card.wide{grid-column:span 2;}}
-  .card img{width:100%;height:220px;object-fit:cover;display:block;cursor:zoom-in;}
-  .card.wide video{width:100%;display:block;max-height:480px;}
-  .card-overlay{position:absolute;left:0;right:0;bottom:0;padding:10px 12px;background:linear-gradient(to top, rgba(20,15,12,.7), rgba(20,15,12,0));color:#fff;pointer-events:none;}
-  .card.wide .card-overlay{position:static;background:none;color:var(--ink-soft);padding:8px 2px 0;pointer-events:auto;}
-  .card-overlay .date{font-size:11px;opacity:.9;}
-  .card-overlay .label{font-size:13px;font-weight:600;}
-  .comment-btn{cursor:pointer;margin-left:8px;text-decoration:underline;pointer-events:auto;}
+
+  /* photo polaroid cards */
+  .photo-card{position:relative;background:var(--card);border-radius:18px;padding:8px 8px 4px;box-shadow:0 6px 16px rgba(74,64,56,.12);transition:transform .3s ease, box-shadow .3s ease;transform:rotate(var(--rot,0deg));}
+  .photo-card:hover{transform:translateY(-6px) scale(1.04) rotate(0deg);box-shadow:0 14px 26px rgba(74,64,56,.18);z-index:2;}
+  .photo-wrap{border-radius:12px;overflow:hidden;background:#000;}
+  .photo-card img{width:100%;height:190px;object-fit:cover;display:block;cursor:zoom-in;}
+  .polaroid-cap{text-align:center;padding:9px 4px 12px;}
+  .cap-date{display:block;font-family:'Gaegu','Pretendard',sans-serif;font-size:12px;color:var(--ink-soft);}
+  .cap-label{display:block;font-family:'Gaegu','Pretendard',sans-serif;font-size:14.5px;font-weight:700;color:var(--ink);margin-top:2px;}
+  .sticker{position:absolute;top:-12px;right:-8px;font-size:24px;filter:drop-shadow(0 2px 3px rgba(0,0,0,.18));transform:rotate(14deg);z-index:2;}
+
+  /* video cards */
+  .video-card{grid-column:span 3;background:linear-gradient(135deg,var(--mint-soft),var(--lavender-soft));padding:12px;border-radius:24px;box-shadow:0 6px 18px rgba(74,64,56,.10);}
+  @media (max-width:640px){.video-card{grid-column:span 2;}}
+  .video-frame{border-radius:16px;overflow:hidden;background:#000;}
+  .video-card video{width:100%;display:block;max-height:480px;}
+  .video-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 4px 2px;}
+  .video-meta .cap-date{color:var(--ink-soft);}
+  .video-meta .cap-label{margin-top:0;}
+  .comment-chip{margin-left:auto;cursor:pointer;background:var(--coral);color:#fff;font-size:12.5px;font-weight:700;padding:7px 15px;border-radius:999px;box-shadow:0 4px 10px rgba(255,157,133,.38);transition:transform .15s ease;}
+  .comment-chip:hover{transform:translateY(-2px) scale(1.05);}
+
   .lightbox{position:fixed;inset:0;background:rgba(20,15,12,.88);display:none;align-items:center;justify-content:center;z-index:999;padding:24px;}
   .lightbox.open{display:flex;}
   .lightbox-close{position:absolute;top:20px;right:24px;color:#fff;font-size:32px;font-weight:700;cursor:pointer;line-height:1;background:rgba(255,255,255,.15);width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:2;}
@@ -61,28 +88,31 @@
   .comment-box{background:var(--card);border-radius:0 0 20px 20px;padding:14px 16px 16px;display:flex;flex-direction:column;gap:10px;max-height:34vh;}
   .comment-box.no-image{border-radius:20px;max-height:60vh;}
   .comment-list{overflow-y:auto;display:flex;flex-direction:column;gap:8px;flex:1;min-height:40px;}
-  .c-item{background:var(--mint-soft);border-radius:12px;padding:8px 12px;font-size:13px;line-height:1.5;}
-  .c-name{font-weight:700;color:var(--coral);margin-right:6px;}
+  .c-item{max-width:82%;background:var(--mint-soft);border-radius:14px 14px 14px 4px;padding:8px 12px;font-size:13.5px;line-height:1.5;font-family:'Gaegu','Pretendard',sans-serif;}
+  .c-item:nth-child(even){background:var(--coral-soft);align-self:flex-end;border-radius:14px 14px 4px 14px;}
+  .c-name{font-family:'Pretendard',sans-serif;font-weight:700;color:var(--coral);margin-right:6px;font-size:12px;}
   .c-text{color:var(--ink);word-break:break-word;}
-  .c-empty, .c-loading{color:var(--ink-soft);font-size:12.5px;text-align:center;padding:10px 0;}
+  .c-empty, .c-loading{color:var(--ink-soft);font-size:12.5px;text-align:center;padding:10px 0;font-family:'Gaegu','Pretendard',sans-serif;}
   .comment-form{display:flex;gap:6px;flex-wrap:wrap;}
   .comment-form input{border:2px solid var(--mint-soft);border-radius:999px;padding:7px 12px;font-size:13px;font-family:inherit;outline:none;}
-  .comment-form input:focus{border-color:var(--mint);}
+  .comment-form input:focus{border-color:var(--lavender);}
   .comment-form .c-input-name{flex:0 0 76px;}
   .comment-form .c-input-text{flex:1;min-width:120px;}
   .comment-form button{background:var(--coral);color:#fff;border:none;border-radius:999px;padding:7px 16px;font-size:13px;font-weight:700;cursor:pointer;flex-shrink:0;}
   .comment-form button:disabled{opacity:.5;}
-  footer{text-align:center;padding:30px 24px 50px;color:var(--ink-soft);font-size:12px;}
+
+  footer{text-align:center;padding:34px 24px 54px;color:var(--ink-soft);font-size:12px;}
+  footer .divider{font-size:16px;letter-spacing:8px;color:var(--mint);margin-bottom:12px;opacity:.9;}
   footer strong{color:var(--ink);}
 </style>
 </head>
 <body>
 <div class="hero">
-  <span class="deco d1">⭐</span><span class="deco d2">🎈</span><span class="deco d3">🧸</span><span class="deco d4">☁️</span>
+  <span class="deco d1">⭐</span><span class="deco d2">🎈</span><span class="deco d3">🧸</span><span class="deco d4">☁️</span><span class="deco d5">🍼</span><span class="deco d6">🌸</span>
   <div class="hero-badge">🤰 Pregnancy Diary</div>
   <h1>우리 아기를 <span class="hl">기다리는</span> 시간,<br>하루하루 기록해요</h1>
   <p>초음파 사진과 영상을 촬영일 기준 임신 주차별로 자동 정리했어요.</p>
-  <div class="dday" id="dday">D-day 계산 중...</div>
+  <div class="dday" id="dday">💗 D-day 계산 중...</div>
   <div class="week-nav">
     <a href="#w5-6">5주6일</a><a href="#w6-6">6주6일</a><a href="#w8-0">8주0일</a><a href="#w13-6">13주6일</a><a href="#w14-6">14주6일</a>
   </div>
@@ -96,61 +126,91 @@
   
     <section class="week-block" id="w5-6">
       <div class="week-header">
-        <div class="week-icon" style="background:#e3f5f0">🤰</div>
+        <div class="week-icon" style="background:#e6f7f2">🤰</div>
         <h2 class="round-font">임신 5주 6일</h2>
-        <span class="date-tag">2026-05-11</span>
+        <span class="date-tag">📅 2026-05-11</span>
       </div>
       <div class="grid">
         
-        <div class="card">
-          <img src="KakaoTalk_20260713_205238328_04_web.jpg" alt="2026-05-11" loading="lazy" onclick="openLightbox('KakaoTalk_20260713_205238328_04_web.jpg','KakaoTalk_20260713_205238328_04_web.jpg',false)">
-          <div class="card-overlay"><div class="date">2026-05-11</div><div class="label">초음파 사진</div></div>
+        <div class="card photo-card" style="--rot:-2deg;">
+          <span class="sticker">🌸</span>
+          <div class="photo-wrap">
+            <img src="KakaoTalk_20260713_205238328_04_web.jpg" alt="2026-05-11" loading="lazy" onclick="openLightbox('KakaoTalk_20260713_205238328_04_web.jpg','KakaoTalk_20260713_205238328_04_web.jpg',false)">
+          </div>
+          <div class="polaroid-cap">
+            <span class="cap-date">2026-05-11</span>
+            <span class="cap-label">초음파 사진</span>
+          </div>
         </div>
       </div>
     </section>
     <section class="week-block" id="w6-6">
       <div class="week-header">
-        <div class="week-icon" style="background:#ffe4dc">🤰</div>
+        <div class="week-icon" style="background:#ffe8e0">🤰</div>
         <h2 class="round-font">임신 6주 6일</h2>
-        <span class="date-tag">2026-05-18</span>
+        <span class="date-tag">📅 2026-05-18</span>
       </div>
       <div class="grid">
         
-        <div class="card">
-          <img src="KakaoTalk_20260713_205238328_03_web.jpg" alt="2026-05-18" loading="lazy" onclick="openLightbox('KakaoTalk_20260713_205238328_03_web.jpg','KakaoTalk_20260713_205238328_03_web.jpg',false)">
-          <div class="card-overlay"><div class="date">2026-05-18</div><div class="label">초음파 사진</div></div>
+        <div class="card photo-card" style="--rot:1.5deg;">
+          <span class="sticker">⭐</span>
+          <div class="photo-wrap">
+            <img src="KakaoTalk_20260713_205238328_03_web.jpg" alt="2026-05-18" loading="lazy" onclick="openLightbox('KakaoTalk_20260713_205238328_03_web.jpg','KakaoTalk_20260713_205238328_03_web.jpg',false)">
+          </div>
+          <div class="polaroid-cap">
+            <span class="cap-date">2026-05-18</span>
+            <span class="cap-label">초음파 사진</span>
+          </div>
         </div>
       </div>
     </section>
     <section class="week-block" id="w8-0">
       <div class="week-header">
-        <div class="week-icon" style="background:#fff3d6">🤰</div>
+        <div class="week-icon" style="background:#fff6df">🤰</div>
         <h2 class="round-font">임신 8주 0일</h2>
-        <span class="date-tag">2026-05-26</span>
+        <span class="date-tag">📅 2026-05-26</span>
       </div>
       <div class="grid">
         
-        <div class="card">
-          <img src="KakaoTalk_20260713_205238328_02_web.jpg" alt="2026-05-26" loading="lazy" onclick="openLightbox('KakaoTalk_20260713_205238328_02_web.jpg','KakaoTalk_20260713_205238328_02_web.jpg',false)">
-          <div class="card-overlay"><div class="date">2026-05-26</div><div class="label">초음파 사진</div></div>
+        <div class="card photo-card" style="--rot:-1deg;">
+          <span class="sticker">🎀</span>
+          <div class="photo-wrap">
+            <img src="KakaoTalk_20260713_205238328_02_web.jpg" alt="2026-05-26" loading="lazy" onclick="openLightbox('KakaoTalk_20260713_205238328_02_web.jpg','KakaoTalk_20260713_205238328_02_web.jpg',false)">
+          </div>
+          <div class="polaroid-cap">
+            <span class="cap-date">2026-05-26</span>
+            <span class="cap-label">초음파 사진</span>
+          </div>
         </div>
       </div>
     </section>
     <section class="week-block" id="w13-6">
       <div class="week-header">
-        <div class="week-icon" style="background:#e6ecff">🤰</div>
+        <div class="week-icon" style="background:#e9e4ff">🤰</div>
         <h2 class="round-font">임신 13주 6일</h2>
-        <span class="date-tag">2026-07-06</span>
+        <span class="date-tag">📅 2026-07-06</span>
       </div>
       <div class="grid">
         
-        <div class="card">
-          <img src="KakaoTalk_20260713_205238328_01_web.jpg" alt="2026-07-06" loading="lazy" onclick="openLightbox('KakaoTalk_20260713_205238328_01_web.jpg','KakaoTalk_20260713_205238328_01_web.jpg',false)">
-          <div class="card-overlay"><div class="date">2026-07-06</div><div class="label">초음파 사진</div></div>
+        <div class="card photo-card" style="--rot:-2deg;">
+          <span class="sticker">💛</span>
+          <div class="photo-wrap">
+            <img src="KakaoTalk_20260713_205238328_01_web.jpg" alt="2026-07-06" loading="lazy" onclick="openLightbox('KakaoTalk_20260713_205238328_01_web.jpg','KakaoTalk_20260713_205238328_01_web.jpg',false)">
+          </div>
+          <div class="polaroid-cap">
+            <span class="cap-date">2026-07-06</span>
+            <span class="cap-label">초음파 사진</span>
+          </div>
         </div>
-        <div class="card">
-          <img src="KakaoTalk_20260713_205238328_web.jpg" alt="2026-07-06" loading="lazy" onclick="openLightbox('KakaoTalk_20260713_205238328_web.jpg','KakaoTalk_20260713_205238328_web.jpg',false)">
-          <div class="card-overlay"><div class="date">2026-07-06</div><div class="label">초음파 사진</div></div>
+        <div class="card photo-card" style="--rot:1.5deg;">
+          <span class="sticker">🍼</span>
+          <div class="photo-wrap">
+            <img src="KakaoTalk_20260713_205238328_web.jpg" alt="2026-07-06" loading="lazy" onclick="openLightbox('KakaoTalk_20260713_205238328_web.jpg','KakaoTalk_20260713_205238328_web.jpg',false)">
+          </div>
+          <div class="polaroid-cap">
+            <span class="cap-date">2026-07-06</span>
+            <span class="cap-label">초음파 사진</span>
+          </div>
         </div>
       </div>
     </section>
@@ -158,38 +218,65 @@
       <div class="week-header">
         <div class="week-icon" style="background:#ffe0ef">🤰</div>
         <h2 class="round-font">임신 14주 6일</h2>
-        <span class="date-tag">2026-07-13</span>
+        <span class="date-tag">📅 2026-07-13</span>
       </div>
       <div class="grid">
         
-        <div class="card wide">
-          <video controls preload="metadata" playsinline>
-            <source src="cd_web.mp4" type="video/mp4">
-          </video>
-          <div class="card-overlay"><div class="date">2026-07-13</div><div class="label">영상 · 5:46 <span class="comment-btn" onclick="openLightbox('','cd_web.mp4',true)">💬 댓글</span></div></div>
+        <div class="card wide video-card">
+          <div class="video-frame">
+            <video controls preload="metadata" playsinline>
+              <source src="cd_web.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="video-meta">
+            <span class="cap-date">2026-07-13</span>
+            <span class="cap-label">🎬 영상 · 5:46</span>
+            <span class="comment-chip" onclick="openLightbox('','cd_web.mp4',true)">💬 댓글 남기기</span>
+          </div>
         </div>
-        <div class="card wide">
-          <video controls preload="metadata" playsinline>
-            <source src="cd2_web.mp4" type="video/mp4">
-          </video>
-          <div class="card-overlay"><div class="date">2026-07-13</div><div class="label">영상 · 3:23 <span class="comment-btn" onclick="openLightbox('','cd2_web.mp4',true)">💬 댓글</span></div></div>
+        <div class="card wide video-card">
+          <div class="video-frame">
+            <video controls preload="metadata" playsinline>
+              <source src="cd2_web.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="video-meta">
+            <span class="cap-date">2026-07-13</span>
+            <span class="cap-label">🎬 영상 · 3:23</span>
+            <span class="comment-chip" onclick="openLightbox('','cd2_web.mp4',true)">💬 댓글 남기기</span>
+          </div>
         </div>
-        <div class="card wide">
-          <video controls preload="metadata" playsinline>
-            <source src="cd3_web.mp4" type="video/mp4">
-          </video>
-          <div class="card-overlay"><div class="date">2026-07-13</div><div class="label">영상 · 2:25 <span class="comment-btn" onclick="openLightbox('','cd3_web.mp4',true)">💬 댓글</span></div></div>
+        <div class="card wide video-card">
+          <div class="video-frame">
+            <video controls preload="metadata" playsinline>
+              <source src="cd3_web.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="video-meta">
+            <span class="cap-date">2026-07-13</span>
+            <span class="cap-label">🎬 영상 · 2:25</span>
+            <span class="comment-chip" onclick="openLightbox('','cd3_web.mp4',true)">💬 댓글 남기기</span>
+          </div>
         </div>
-        <div class="card wide">
-          <video controls preload="metadata" playsinline>
-            <source src="cd4_web.mp4" type="video/mp4">
-          </video>
-          <div class="card-overlay"><div class="date">2026-07-13</div><div class="label">영상 · 30:36 <span class="comment-btn" onclick="openLightbox('','cd4_web.mp4',true)">💬 댓글</span></div></div>
+        <div class="card wide video-card">
+          <div class="video-frame">
+            <video controls preload="metadata" playsinline>
+              <source src="cd4_web.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="video-meta">
+            <span class="cap-date">2026-07-13</span>
+            <span class="cap-label">🎬 영상 · 30:36</span>
+            <span class="comment-chip" onclick="openLightbox('','cd4_web.mp4',true)">💬 댓글 남기기</span>
+          </div>
         </div>
       </div>
     </section>
 </main>
-<footer>Pregnancy diary · 출산예정일 <strong>2027-01-05</strong> · 나스에 새 사진이 추가되면 12시간마다 자동으로 갱신됩니다</footer>
+<footer>
+  <div class="divider">🍼 ⋯ ⭐ ⋯ 🧸</div>
+  Pregnancy diary · 출산예정일 <strong>2027-01-05</strong> · 나스에 새 사진이 추가되면 12시간마다 자동으로 갱신됩니다
+</footer>
 <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
   <div class="lightbox-close" onclick="closeLightbox(event)">&times;</div>
   <div class="lightbox-inner" onclick="event.stopPropagation()">
@@ -199,7 +286,7 @@
       <form class="comment-form" id="comment-form">
         <input type="text" class="c-input-name" id="c-input-name" placeholder="이름" maxlength="20" required>
         <input type="text" class="c-input-text" placeholder="댓글을 남겨보세요" maxlength="300" required>
-        <button type="submit">등록</button>
+        <button type="submit">💌 등록</button>
       </form>
     </div>
   </div>
@@ -223,7 +310,7 @@
   const due = new Date("2027-01-05T00:00:00");
   const now = new Date();
   const diff = Math.ceil((due - now) / (1000*60*60*24));
-  document.getElementById('dday').textContent = diff > 0 ? `D-${diff}` : (diff === 0 ? 'D-Day 🎉' : `출산 후 ${-diff}일`);
+  document.getElementById('dday').textContent = diff > 0 ? `💗 D-${diff}` : (diff === 0 ? '🎉 D-Day' : `💗 출산 후 ${-diff}일`);
 
   const savedName = localStorage.getItem('diary-commenter-name');
   if(savedName) document.getElementById('c-input-name').value = savedName;
