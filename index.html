@@ -43,15 +43,21 @@
   .note{max-width:640px;margin:26px auto 0;padding:12px 18px;background:var(--yellow-soft);border-radius:14px;font-size:12px;color:#8a6a2a;text-align:center;}
 
   /* calendar (now the main hero visual) */
-  .calendar-wrap{max-width:600px;margin:34px auto 0;}
-  .calendar-card{background:var(--card);border-radius:30px;padding:26px 26px 30px;box-shadow:0 14px 34px rgba(74,64,56,.14);}
+  .calendar-wrap{max-width:600px;margin:34px auto 28px;}
+  .calendar-card{background:var(--card);border-radius:30px;padding:26px 26px 34px;box-shadow:0 14px 34px rgba(74,64,56,.14);overflow:visible;}
   .calendar-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
   .calendar-title{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:22px;color:var(--ink);}
   .cal-nav{background:var(--mint-soft);border:none;width:38px;height:38px;border-radius:50%;font-size:19px;color:var(--ink);cursor:pointer;line-height:1;}
   .cal-nav:hover{background:var(--mint);color:#fff;}
   .calendar-weekdays{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:10px;}
   .calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;}
-  .cal-cell{aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;border-radius:14px;position:relative;padding-top:6px;}
+  .cal-cell{aspect-ratio:1;min-height:34px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;border-radius:14px;position:relative;padding-top:6px;}
+  @media (max-width:420px){
+    .calendar-grid{gap:3px;}
+    .cal-cell{aspect-ratio:auto;height:40px;padding-top:4px;}
+    .cal-thumb{width:28px;height:28px;margin-top:2px;}
+    .cal-num{font-size:11px;}
+  }
   .cal-cell.empty{visibility:hidden;}
   .cal-num{font-size:12.5px;color:var(--ink-soft);}
   .cal-cell.today .cal-num{color:var(--coral);font-weight:700;}
@@ -73,6 +79,14 @@
   .day-panel-item img{width:100%;height:100%;object-fit:cover;}
 
   main{max-width:900px;margin:0 auto;padding:48px 20px 90px;}
+  details.month-group{margin-bottom:20px;}
+  details.month-group summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px;padding:14px 20px;background:var(--card);border-radius:16px;box-shadow:0 4px 12px rgba(74,64,56,.08);}
+  details.month-group summary::-webkit-details-marker{display:none;}
+  details.month-group summary::before{content:'▸';color:var(--coral);font-size:13px;transition:transform .2s ease;}
+  details.month-group[open] summary::before{transform:rotate(90deg);}
+  details.month-group .month-title{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:16px;color:var(--ink);}
+  details.month-group .month-count{margin-left:auto;font-size:12px;color:var(--ink-soft);font-weight:600;background:var(--mint-soft);padding:3px 10px;border-radius:999px;}
+  details.month-group .month-body{padding-top:20px;}
   .week-block{margin-bottom:56px;scroll-margin-top:30px;}
   .week-header{display:flex;align-items:center;gap:12px;margin-bottom:24px;padding-bottom:16px;border-bottom:2px solid var(--line);}
   .week-icon{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;border:3px solid #fff;box-shadow:0 3px 8px rgba(74,64,56,.14);}
@@ -85,8 +99,10 @@
   /* photo polaroid cards */
   .photo-card{position:relative;background:var(--card);border-radius:18px;padding:8px 8px 4px;box-shadow:0 6px 16px rgba(74,64,56,.12);transition:transform .3s ease, box-shadow .3s ease;transform:rotate(var(--rot,0deg));}
   .photo-card:hover{transform:translateY(-6px) scale(1.04) rotate(0deg);box-shadow:0 14px 26px rgba(74,64,56,.18);z-index:2;}
-  .photo-wrap{border-radius:12px;overflow:hidden;background:#000;}
+  .photo-wrap{position:relative;border-radius:12px;overflow:hidden;background:#000;}
   .photo-card img{width:100%;height:190px;object-fit:cover;display:block;cursor:zoom-in;}
+  .video-fallback{width:100%;height:190px;display:flex;align-items:center;justify-content:center;font-size:40px;background:#111;color:#fff;}
+  .play-badge{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:42px;height:42px;border-radius:50%;background:rgba(20,15,12,.55);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;pointer-events:none;}
   .polaroid-cap{text-align:center;padding:9px 4px 12px;}
   .cap-date{display:block;font-family:'Gaegu','Pretendard',sans-serif;font-size:12px;color:var(--ink-soft);}
   .cap-label{display:block;font-family:'Gaegu','Pretendard',sans-serif;font-size:14.5px;font-weight:700;color:var(--ink);margin-top:2px;}
@@ -171,15 +187,174 @@
 </div>
 <main>
   
-    <section class="week-block" id="w5-6">
+    <details class="month-group" open>
+      <summary>
+        <span class="month-title">2026년 7월</span>
+        <span class="month-count">3건</span>
+      </summary>
+      <div class="month-body">
+        
+    <section class="week-block" id="w13-6">
       <div class="week-header">
         <div class="week-icon" style="background:#e6f7f2">🤰</div>
+        <h2 class="round-font">임신 13주 6일</h2>
+        <span class="date-tag">📅 2026-07-06</span>
+      </div>
+      <div class="grid">
+        
+        <div class="card photo-card" style="--rot:-2deg;">
+          <span class="sticker">🌸</span>
+          <span class="count-badge">1/2</span>
+          <div class="photo-wrap">
+            <img src="KakaoTalk_20260713_205238328_01_web.jpg" alt="2026-07-06" loading="lazy" onclick="openPhotoLightbox('2026-07-06',0)">
+          </div>
+          <div class="polaroid-cap">
+            <span class="cap-date">2026-07-06</span>
+            <span class="cap-label">초음파 사진</span>
+          </div>
+        </div>
+        <div class="card photo-card" style="--rot:1.5deg;">
+          <span class="sticker">⭐</span>
+          <span class="count-badge">2/2</span>
+          <div class="photo-wrap">
+            <img src="KakaoTalk_20260713_205238328_web.jpg" alt="2026-07-06" loading="lazy" onclick="openPhotoLightbox('2026-07-06',1)">
+          </div>
+          <div class="polaroid-cap">
+            <span class="cap-date">2026-07-06</span>
+            <span class="cap-label">초음파 사진</span>
+          </div>
+        </div>
+        <div class="card photo-card" style="--rot:-1deg;">
+          <div class="photo-wrap" onclick="openVideoLightbox('cd4_web.mp4')">
+            <img src="cd4_poster.jpg" alt="2026-07-06" loading="lazy">
+            <span class="play-badge">▶</span>
+          </div>
+          <div class="polaroid-cap">
+            <span class="cap-date">2026-07-06</span>
+            <span class="cap-label">🎬 영상 30:36</span>
+          </div>
+        </div>
+      </div>
+    </section>
+      </div>
+    </details>
+    <details class="month-group">
+      <summary>
+        <span class="month-title">2026년 6월</span>
+        <span class="month-count">2건</span>
+      </summary>
+      <div class="month-body">
+        
+    <section class="week-block" id="w9-6">
+      <div class="week-header">
+        <div class="week-icon" style="background:#ffe8e0">🤰</div>
+        <h2 class="round-font">임신 9주 6일</h2>
+        <span class="date-tag">📅 2026-06-08</span>
+      </div>
+      <div class="grid">
+        
+        <div class="card photo-card" style="--rot:-2deg;">
+          <div class="photo-wrap" onclick="openVideoLightbox('cd3_web.mp4')">
+            <img src="cd3_poster.jpg" alt="2026-06-08" loading="lazy">
+            <span class="play-badge">▶</span>
+          </div>
+          <div class="polaroid-cap">
+            <span class="cap-date">2026-06-08</span>
+            <span class="cap-label">🎬 영상 2:25</span>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="week-block" id="w8-6">
+      <div class="week-header">
+        <div class="week-icon" style="background:#fff6df">🤰</div>
+        <h2 class="round-font">임신 8주 6일</h2>
+        <span class="date-tag">📅 2026-06-01</span>
+      </div>
+      <div class="grid">
+        
+        <div class="card photo-card" style="--rot:1.5deg;">
+          <div class="photo-wrap" onclick="openVideoLightbox('cd2_web.mp4')">
+            <img src="cd2_poster.jpg" alt="2026-06-01" loading="lazy">
+            <span class="play-badge">▶</span>
+          </div>
+          <div class="polaroid-cap">
+            <span class="cap-date">2026-06-01</span>
+            <span class="cap-label">🎬 영상 3:23</span>
+          </div>
+        </div>
+      </div>
+    </section>
+      </div>
+    </details>
+    <details class="month-group">
+      <summary>
+        <span class="month-title">2026년 5월</span>
+        <span class="month-count">4건</span>
+      </summary>
+      <div class="month-body">
+        
+    <section class="week-block" id="w8-0">
+      <div class="week-header">
+        <div class="week-icon" style="background:#e9e4ff">🤰</div>
+        <h2 class="round-font">임신 8주 0일</h2>
+        <span class="date-tag">📅 2026-05-26</span>
+      </div>
+      <div class="grid">
+        
+        <div class="card photo-card" style="--rot:-1deg;">
+          <span class="sticker">🧸</span>
+          
+          <div class="photo-wrap">
+            <img src="KakaoTalk_20260713_205238328_02_web.jpg" alt="2026-05-26" loading="lazy" onclick="openPhotoLightbox('2026-05-26',0)">
+          </div>
+          <div class="polaroid-cap">
+            <span class="cap-date">2026-05-26</span>
+            <span class="cap-label">초음파 사진</span>
+          </div>
+        </div>
+        <div class="card photo-card" style="--rot:-2deg;">
+          <div class="photo-wrap" onclick="openVideoLightbox('cd_web.mp4')">
+            <img src="cd_poster.jpg" alt="2026-05-26" loading="lazy">
+            <span class="play-badge">▶</span>
+          </div>
+          <div class="polaroid-cap">
+            <span class="cap-date">2026-05-26</span>
+            <span class="cap-label">🎬 영상 5:46</span>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="week-block" id="w6-6">
+      <div class="week-header">
+        <div class="week-icon" style="background:#ffe0ef">🤰</div>
+        <h2 class="round-font">임신 6주 6일</h2>
+        <span class="date-tag">📅 2026-05-18</span>
+      </div>
+      <div class="grid">
+        
+        <div class="card photo-card" style="--rot:1.5deg;">
+          <span class="sticker">💫</span>
+          
+          <div class="photo-wrap">
+            <img src="KakaoTalk_20260713_205238328_03_web.jpg" alt="2026-05-18" loading="lazy" onclick="openPhotoLightbox('2026-05-18',0)">
+          </div>
+          <div class="polaroid-cap">
+            <span class="cap-date">2026-05-18</span>
+            <span class="cap-label">초음파 사진</span>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="week-block" id="w5-6">
+      <div class="week-header">
+        <div class="week-icon" style="background:#e4f7e0">🤰</div>
         <h2 class="round-font">임신 5주 6일</h2>
         <span class="date-tag">📅 2026-05-11</span>
       </div>
       <div class="grid">
         
-        <div class="card photo-card" style="--rot:-2deg;">
+        <div class="card photo-card" style="--rot:-1deg;">
           <span class="sticker">🌸</span>
           
           <div class="photo-wrap">
@@ -192,148 +367,8 @@
         </div>
       </div>
     </section>
-    <section class="week-block" id="w6-6">
-      <div class="week-header">
-        <div class="week-icon" style="background:#ffe8e0">🤰</div>
-        <h2 class="round-font">임신 6주 6일</h2>
-        <span class="date-tag">📅 2026-05-18</span>
       </div>
-      <div class="grid">
-        
-        <div class="card photo-card" style="--rot:1.5deg;">
-          <span class="sticker">⭐</span>
-          
-          <div class="photo-wrap">
-            <img src="KakaoTalk_20260713_205238328_03_web.jpg" alt="2026-05-18" loading="lazy" onclick="openPhotoLightbox('2026-05-18',0)">
-          </div>
-          <div class="polaroid-cap">
-            <span class="cap-date">2026-05-18</span>
-            <span class="cap-label">초음파 사진</span>
-          </div>
-        </div>
-      </div>
-    </section>
-    <section class="week-block" id="w8-0">
-      <div class="week-header">
-        <div class="week-icon" style="background:#fff6df">🤰</div>
-        <h2 class="round-font">임신 8주 0일</h2>
-        <span class="date-tag">📅 2026-05-26</span>
-      </div>
-      <div class="grid">
-        
-        <div class="card photo-card" style="--rot:-1deg;">
-          <span class="sticker">🎀</span>
-          
-          <div class="photo-wrap">
-            <img src="KakaoTalk_20260713_205238328_02_web.jpg" alt="2026-05-26" loading="lazy" onclick="openPhotoLightbox('2026-05-26',0)">
-          </div>
-          <div class="polaroid-cap">
-            <span class="cap-date">2026-05-26</span>
-            <span class="cap-label">초음파 사진</span>
-          </div>
-        </div>
-        <div class="card wide video-card">
-          <div class="video-frame">
-            <video controls preload="metadata" playsinline>
-              <source src="cd_web.mp4" type="video/mp4">
-            </video>
-          </div>
-          <div class="video-meta">
-            <span class="cap-date">2026-05-26</span>
-            <span class="cap-label">🎬 영상 · 5:46</span>
-            <span class="comment-chip" onclick="openVideoLightbox('cd_web.mp4')">💬 댓글 남기기</span>
-          </div>
-        </div>
-      </div>
-    </section>
-    <section class="week-block" id="w8-6">
-      <div class="week-header">
-        <div class="week-icon" style="background:#e9e4ff">🤰</div>
-        <h2 class="round-font">임신 8주 6일</h2>
-        <span class="date-tag">📅 2026-06-01</span>
-      </div>
-      <div class="grid">
-        
-        <div class="card wide video-card">
-          <div class="video-frame">
-            <video controls preload="metadata" playsinline>
-              <source src="cd2_web.mp4" type="video/mp4">
-            </video>
-          </div>
-          <div class="video-meta">
-            <span class="cap-date">2026-06-01</span>
-            <span class="cap-label">🎬 영상 · 3:23</span>
-            <span class="comment-chip" onclick="openVideoLightbox('cd2_web.mp4')">💬 댓글 남기기</span>
-          </div>
-        </div>
-      </div>
-    </section>
-    <section class="week-block" id="w9-6">
-      <div class="week-header">
-        <div class="week-icon" style="background:#ffe0ef">🤰</div>
-        <h2 class="round-font">임신 9주 6일</h2>
-        <span class="date-tag">📅 2026-06-08</span>
-      </div>
-      <div class="grid">
-        
-        <div class="card wide video-card">
-          <div class="video-frame">
-            <video controls preload="metadata" playsinline>
-              <source src="cd3_web.mp4" type="video/mp4">
-            </video>
-          </div>
-          <div class="video-meta">
-            <span class="cap-date">2026-06-08</span>
-            <span class="cap-label">🎬 영상 · 2:25</span>
-            <span class="comment-chip" onclick="openVideoLightbox('cd3_web.mp4')">💬 댓글 남기기</span>
-          </div>
-        </div>
-      </div>
-    </section>
-    <section class="week-block" id="w13-6">
-      <div class="week-header">
-        <div class="week-icon" style="background:#e4f7e0">🤰</div>
-        <h2 class="round-font">임신 13주 6일</h2>
-        <span class="date-tag">📅 2026-07-06</span>
-      </div>
-      <div class="grid">
-        
-        <div class="card photo-card" style="--rot:-2deg;">
-          <span class="sticker">💛</span>
-          <span class="count-badge">1/2</span>
-          <div class="photo-wrap">
-            <img src="KakaoTalk_20260713_205238328_01_web.jpg" alt="2026-07-06" loading="lazy" onclick="openPhotoLightbox('2026-07-06',0)">
-          </div>
-          <div class="polaroid-cap">
-            <span class="cap-date">2026-07-06</span>
-            <span class="cap-label">초음파 사진</span>
-          </div>
-        </div>
-        <div class="card photo-card" style="--rot:1.5deg;">
-          <span class="sticker">🍼</span>
-          <span class="count-badge">2/2</span>
-          <div class="photo-wrap">
-            <img src="KakaoTalk_20260713_205238328_web.jpg" alt="2026-07-06" loading="lazy" onclick="openPhotoLightbox('2026-07-06',1)">
-          </div>
-          <div class="polaroid-cap">
-            <span class="cap-date">2026-07-06</span>
-            <span class="cap-label">초음파 사진</span>
-          </div>
-        </div>
-        <div class="card wide video-card">
-          <div class="video-frame">
-            <video controls preload="metadata" playsinline>
-              <source src="cd4_web.mp4" type="video/mp4">
-            </video>
-          </div>
-          <div class="video-meta">
-            <span class="cap-date">2026-07-06</span>
-            <span class="cap-label">🎬 영상 · 30:36</span>
-            <span class="comment-chip" onclick="openVideoLightbox('cd4_web.mp4')">💬 댓글 남기기</span>
-          </div>
-        </div>
-      </div>
-    </section>
+    </details>
 </main>
 <footer>
   <div class="divider">🍼 ⋯ ⭐ ⋯ 🧸</div>
@@ -652,7 +687,8 @@
     grid.innerHTML = '';
     const firstDay = new Date(calYear, calMonth, 1).getDay();
     const daysInMonth = new Date(calYear, calMonth+1, 0).getDate();
-    const todayStr = new Date().toISOString().slice(0,10);
+    const _now = new Date();
+    const todayStr = `${_now.getFullYear()}-${pad(_now.getMonth()+1)}-${pad(_now.getDate())}`;
 
     for(let i=0;i<firstDay;i++){
       const empty = document.createElement('div');
@@ -738,6 +774,18 @@
       document.getElementById('day-panel').classList.remove('open');
     }
   };
+
+  function openDetailsFor(id){
+    const target = document.getElementById(id);
+    if(!target) return;
+    const details = target.closest('details');
+    if(details) details.open = true;
+  }
+  document.querySelectorAll('.week-nav a').forEach(a => {
+    a.addEventListener('click', () => openDetailsFor(a.getAttribute('href').slice(1)));
+  });
+  if(location.hash) openDetailsFor(location.hash.slice(1));
+  window.addEventListener('hashchange', () => openDetailsFor(location.hash.slice(1)));
 
   renderCalendar();
 </script>
