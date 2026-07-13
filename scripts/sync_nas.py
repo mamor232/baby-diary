@@ -14,12 +14,14 @@ Required environment variables (set as GitHub Secrets):
   SYNOLOGY_PASS  the account's password
 """
 import os
+import re
 import json
 import subprocess
 from collections import defaultdict
 from datetime import date, datetime
 
 import requests
+import numpy as np
 from PIL import Image
 from PIL.ExifTags import TAGS
 
@@ -104,19 +106,77 @@ def process_photo(name, local_path, manifest):
     })
 
 
-def process_video(name, local_path, manifest):
-    probe = subprocess.run(
-        ["ffprobe", "-v", "quiet", "-show_entries", "format_tags=creation_time",
-         "-of", "default=noprint_wrappers=1:nokey=1", local_path],
-        capture_output=True, text=True,
-    ).stdout.strip()
-    if probe:
+_DATE_RE = re.compile(r'(20\d{2})[/-](\d{2})[/-](\d{2})')
+
+
+def _ocr_video_date(local_path):
+    """Ultrasound machines (GE Voluson, Samsung, etc.) burn a live date/time
+    overlay into the recorded screen video. That's the actual scan date,
+    far more reliable than file metadata (which usually just reflects when
+    the file was copied/downloaded). This grabs a few frames, crops the top
+    overlay strip, OCRs it with a couple of contrast settings, and returns
+    the first valid date found. Returns None if nothing usable is found
+    (e.g. the overlay text is cut off at the frame edge in the source
+    recording -- in that case the caller falls back to ffprobe / now(), and
+    the date may need a manual fix in manifest.json)."""
+    for ts in (2, 30, 90):
+        frame_path = f"/tmp/_ocr_frame_{os.getpid()}_{ts}.png"
         try:
-            dt = datetime.fromisoformat(probe.replace("Z", "+00:00")).replace(tzinfo=None)
-        except ValueError:
-            dt = datetime.now()
+            subprocess.run([
+                "ffmpeg", "-y", "-ss", str(ts), "-i", local_path,
+                "-vframes", "1", "-vf", "crop=iw:ih*0.09:0:0,scale=iw*3:ih*3",
+                frame_path,
+            ], capture_output=True, timeout=30)
+        except Exception:
+            continue
+        if not os.path.exists(frame_path):
+            continue
+        for variant, thresh in (("raw", None), ("bw120", 120), ("bw90", 90)):
+            img_path = frame_path
+            if thresh is not None:
+                try:
+                    im = Image.open(frame_path).convert("L")
+                    arr = np.array(im)
+                    bw = (arr > thresh).astype("uint8") * 255
+                    img_path = frame_path.replace(".png", f"_{variant}.png")
+                    Image.fromarray(255 - bw).save(img_path)
+                except Exception:
+                    continue
+            try:
+                text = subprocess.run(
+                    ["tesseract", img_path, "-", "--psm", "6"],
+                    capture_output=True, text=True, timeout=20,
+                ).stdout
+            except Exception:
+                continue
+            m = _DATE_RE.search(text)
+            if m:
+                y, mo, d = int(m.group(1)), int(m.group(2)), int(m.group(3))
+                if 2020 <= y <= 2035 and 1 <= mo <= 12 and 1 <= d <= 31:
+                    try:
+                        return date(y, mo, d)
+                    except ValueError:
+                        pass
+    return None
+
+
+def process_video(name, local_path, manifest):
+    ocr_date = _ocr_video_date(local_path)
+    if ocr_date:
+        dt = datetime.combine(ocr_date, datetime.min.time())
     else:
-        dt = datetime.now()
+        probe = subprocess.run(
+            ["ffprobe", "-v", "quiet", "-show_entries", "format_tags=creation_time",
+             "-of", "default=noprint_wrappers=1:nokey=1", local_path],
+            capture_output=True, text=True,
+        ).stdout.strip()
+        if probe:
+            try:
+                dt = datetime.fromisoformat(probe.replace("Z", "+00:00")).replace(tzinfo=None)
+            except ValueError:
+                dt = datetime.now()
+        else:
+            dt = datetime.now()
     w, d = ga_week_day(dt.date())
 
     dur = float(subprocess.run(
