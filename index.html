@@ -15,7 +15,6 @@
   html,body{margin:0;padding:0;}
   body{font-family:'Pretendard','Apple SD Gothic Neo',sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;}
   .round-font{font-family:'Baloo 2','Pretendard',sans-serif;}
-
   .hero{padding:56px 24px 40px;text-align:center;background:linear-gradient(180deg, var(--mint-soft) 0%, var(--bg) 78%);border-radius:0 0 40px 40px;position:relative;overflow:hidden;}
   .hero .deco{position:absolute;font-size:28px;opacity:.55;animation:float 5s ease-in-out infinite;}
   .hero .d1{top:20px;left:8%;} .hero .d2{top:60px;right:10%;animation-delay:1.2s;}
@@ -26,24 +25,19 @@
   .hero h1 .hl{color:var(--coral);}
   .hero p{color:var(--ink-soft);font-size:14.5px;max-width:420px;margin:0 auto;line-height:1.6;}
   .dday{display:inline-block;margin-top:18px;background:var(--card);border:2px solid var(--coral-soft);padding:8px 20px;border-radius:999px;font-weight:700;color:var(--coral);font-size:14px;}
-
   .week-nav{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:26px;}
   .week-nav a{text-decoration:none;font-weight:600;font-size:13px;color:var(--ink);background:var(--card);border:2px solid var(--mint-soft);padding:7px 16px;border-radius:999px;transition:all .2s ease;}
   .week-nav a:hover{background:var(--mint);border-color:var(--mint);color:#fff;transform:translateY(-2px);}
-
   .highlight{max-width:640px;margin:30px auto 0;text-align:center;}
   .highlight img{width:100%;border-radius:24px;box-shadow:0 8px 24px rgba(74,64,56,.12);}
   .highlight .cap{margin-top:10px;font-size:12.5px;color:var(--ink-soft);}
-
   .note{max-width:640px;margin:26px auto 0;padding:12px 18px;background:var(--yellow-soft);border-radius:14px;font-size:12px;color:#8a6a2a;text-align:center;}
-
   main{max-width:900px;margin:0 auto;padding:44px 20px 90px;}
   .week-block{margin-bottom:56px;scroll-margin-top:30px;}
   .week-header{display:flex;align-items:center;gap:12px;margin-bottom:18px;}
   .week-icon{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
   .week-header h2{font-size:20px;margin:0;}
   .date-tag{font-size:12px;font-weight:600;color:#fff;background:var(--coral);padding:4px 12px;border-radius:999px;margin-left:auto;}
-
   .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
   @media (max-width:640px){.grid{grid-template-columns:repeat(2,1fr);}}
   .card{position:relative;border-radius:20px;overflow:hidden;box-shadow:0 4px 14px rgba(74,64,56,.08);transition:transform .3s ease;background:#000;}
@@ -53,41 +47,51 @@
   .card img{width:100%;height:220px;object-fit:cover;display:block;cursor:zoom-in;}
   .card.wide video{width:100%;display:block;max-height:480px;}
   .card-overlay{position:absolute;left:0;right:0;bottom:0;padding:10px 12px;background:linear-gradient(to top, rgba(20,15,12,.7), rgba(20,15,12,0));color:#fff;pointer-events:none;}
-  .card.wide .card-overlay{position:static;background:none;color:var(--ink-soft);padding:8px 2px 0;}
+  .card.wide .card-overlay{position:static;background:none;color:var(--ink-soft);padding:8px 2px 0;pointer-events:auto;}
   .card-overlay .date{font-size:11px;opacity:.9;}
   .card-overlay .label{font-size:13px;font-weight:600;}
-
+  .comment-btn{cursor:pointer;margin-left:8px;text-decoration:underline;pointer-events:auto;}
   .lightbox{position:fixed;inset:0;background:rgba(20,15,12,.88);display:none;align-items:center;justify-content:center;z-index:999;padding:24px;}
   .lightbox.open{display:flex;}
-  .lightbox img{max-width:100%;max-height:88vh;border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,.4);}
-  .lightbox-close{position:absolute;top:20px;right:24px;color:#fff;font-size:32px;font-weight:700;cursor:pointer;line-height:1;background:rgba(255,255,255,.15);width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+  .lightbox-close{position:absolute;top:20px;right:24px;color:#fff;font-size:32px;font-weight:700;cursor:pointer;line-height:1;background:rgba(255,255,255,.15);width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:2;}
   .lightbox-close:hover{background:rgba(255,255,255,.3);}
-
+  .lightbox-inner{display:flex;flex-direction:column;max-width:520px;width:100%;max-height:92vh;}
+  .lightbox-inner img{max-width:100%;max-height:58vh;border-radius:16px 16px 0 0;box-shadow:0 12px 40px rgba(0,0,0,.4);object-fit:contain;background:#000;}
+  .lightbox-inner img[src=""]{display:none;}
+  .comment-box{background:var(--card);border-radius:0 0 20px 20px;padding:14px 16px 16px;display:flex;flex-direction:column;gap:10px;max-height:34vh;}
+  .comment-box.no-image{border-radius:20px;max-height:60vh;}
+  .comment-list{overflow-y:auto;display:flex;flex-direction:column;gap:8px;flex:1;min-height:40px;}
+  .c-item{background:var(--mint-soft);border-radius:12px;padding:8px 12px;font-size:13px;line-height:1.5;}
+  .c-name{font-weight:700;color:var(--coral);margin-right:6px;}
+  .c-text{color:var(--ink);word-break:break-word;}
+  .c-empty, .c-loading{color:var(--ink-soft);font-size:12.5px;text-align:center;padding:10px 0;}
+  .comment-form{display:flex;gap:6px;flex-wrap:wrap;}
+  .comment-form input{border:2px solid var(--mint-soft);border-radius:999px;padding:7px 12px;font-size:13px;font-family:inherit;outline:none;}
+  .comment-form input:focus{border-color:var(--mint);}
+  .comment-form .c-input-name{flex:0 0 76px;}
+  .comment-form .c-input-text{flex:1;min-width:120px;}
+  .comment-form button{background:var(--coral);color:#fff;border:none;border-radius:999px;padding:7px 16px;font-size:13px;font-weight:700;cursor:pointer;flex-shrink:0;}
+  .comment-form button:disabled{opacity:.5;}
   footer{text-align:center;padding:30px 24px 50px;color:var(--ink-soft);font-size:12px;}
   footer strong{color:var(--ink);}
 </style>
 </head>
 <body>
-
 <div class="hero">
   <span class="deco d1">⭐</span><span class="deco d2">🎈</span><span class="deco d3">🧸</span><span class="deco d4">☁️</span>
   <div class="hero-badge">🤰 Pregnancy Diary</div>
   <h1>우리 아기를 <span class="hl">기다리는</span> 시간,<br>하루하루 기록해요</h1>
   <p>초음파 사진과 영상을 촬영일 기준 임신 주차별로 자동 정리했어요.</p>
   <div class="dday" id="dday">D-day 계산 중...</div>
-
   <div class="week-nav">
     <a href="#w5-6">5주6일</a><a href="#w6-6">6주6일</a><a href="#w8-0">8주0일</a><a href="#w13-6">13주6일</a><a href="#w14-6">14주6일</a>
   </div>
-
   <div class="highlight">
-    <img src="timeline_5w_14w.gif" alt="지금까지의 여정">
-    <div class="cap">5주 6일 ~ 14주 6일, 지금까지의 여정</div>
+    <img src="timeline_5w_13w.gif" alt="지금까지의 여정">
+    <div class="cap">5주 6일 ~ 13주 6일, 지금까지의 여정</div>
   </div>
-
-  <div class="note">🔒 이 페이지는 공개 링크입니다 · 가족 누구나 링크로 볼 수 있어요</div>
+  <div class="note">🔒 이 페이지는 공개 링크입니다 · 가족 누구나 링크로 볼 수 있고, 사진을 눌러 댓글을 남길 수 있어요</div>
 </div>
-
 <main>
   
     <section class="week-block" id="w5-6">
@@ -99,7 +103,7 @@
       <div class="grid">
         
         <div class="card">
-          <img src="KakaoTalk_20260713_205238328_04_web.jpg" alt="2026-05-11" loading="lazy" onclick="openLightbox('KakaoTalk_20260713_205238328_04_web.jpg')">
+          <img src="KakaoTalk_20260713_205238328_04_web.jpg" alt="2026-05-11" loading="lazy" onclick="openLightbox('KakaoTalk_20260713_205238328_04_web.jpg','KakaoTalk_20260713_205238328_04_web.jpg',false)">
           <div class="card-overlay"><div class="date">2026-05-11</div><div class="label">초음파 사진</div></div>
         </div>
       </div>
@@ -113,7 +117,7 @@
       <div class="grid">
         
         <div class="card">
-          <img src="KakaoTalk_20260713_205238328_03_web.jpg" alt="2026-05-18" loading="lazy" onclick="openLightbox('KakaoTalk_20260713_205238328_03_web.jpg')">
+          <img src="KakaoTalk_20260713_205238328_03_web.jpg" alt="2026-05-18" loading="lazy" onclick="openLightbox('KakaoTalk_20260713_205238328_03_web.jpg','KakaoTalk_20260713_205238328_03_web.jpg',false)">
           <div class="card-overlay"><div class="date">2026-05-18</div><div class="label">초음파 사진</div></div>
         </div>
       </div>
@@ -127,7 +131,7 @@
       <div class="grid">
         
         <div class="card">
-          <img src="KakaoTalk_20260713_205238328_02_web.jpg" alt="2026-05-26" loading="lazy" onclick="openLightbox('KakaoTalk_20260713_205238328_02_web.jpg')">
+          <img src="KakaoTalk_20260713_205238328_02_web.jpg" alt="2026-05-26" loading="lazy" onclick="openLightbox('KakaoTalk_20260713_205238328_02_web.jpg','KakaoTalk_20260713_205238328_02_web.jpg',false)">
           <div class="card-overlay"><div class="date">2026-05-26</div><div class="label">초음파 사진</div></div>
         </div>
       </div>
@@ -141,11 +145,11 @@
       <div class="grid">
         
         <div class="card">
-          <img src="KakaoTalk_20260713_205238328_01_web.jpg" alt="2026-07-06" loading="lazy" onclick="openLightbox('KakaoTalk_20260713_205238328_01_web.jpg')">
+          <img src="KakaoTalk_20260713_205238328_01_web.jpg" alt="2026-07-06" loading="lazy" onclick="openLightbox('KakaoTalk_20260713_205238328_01_web.jpg','KakaoTalk_20260713_205238328_01_web.jpg',false)">
           <div class="card-overlay"><div class="date">2026-07-06</div><div class="label">초음파 사진</div></div>
         </div>
         <div class="card">
-          <img src="KakaoTalk_20260713_205238328_web.jpg" alt="2026-07-06" loading="lazy" onclick="openLightbox('KakaoTalk_20260713_205238328_web.jpg')">
+          <img src="KakaoTalk_20260713_205238328_web.jpg" alt="2026-07-06" loading="lazy" onclick="openLightbox('KakaoTalk_20260713_205238328_web.jpg','KakaoTalk_20260713_205238328_web.jpg',false)">
           <div class="card-overlay"><div class="date">2026-07-06</div><div class="label">초음파 사진</div></div>
         </div>
       </div>
@@ -162,56 +166,155 @@
           <video controls preload="metadata" playsinline>
             <source src="cd_web.mp4" type="video/mp4">
           </video>
-          <div class="card-overlay"><div class="date">2026-07-13</div><div class="label">영상 · 5:46</div></div>
+          <div class="card-overlay"><div class="date">2026-07-13</div><div class="label">영상 · 5:46 <span class="comment-btn" onclick="openLightbox('','cd_web.mp4',true)">💬 댓글</span></div></div>
         </div>
         <div class="card wide">
           <video controls preload="metadata" playsinline>
             <source src="cd2_web.mp4" type="video/mp4">
           </video>
-          <div class="card-overlay"><div class="date">2026-07-13</div><div class="label">영상 · 3:23</div></div>
+          <div class="card-overlay"><div class="date">2026-07-13</div><div class="label">영상 · 3:23 <span class="comment-btn" onclick="openLightbox('','cd2_web.mp4',true)">💬 댓글</span></div></div>
         </div>
         <div class="card wide">
           <video controls preload="metadata" playsinline>
             <source src="cd3_web.mp4" type="video/mp4">
           </video>
-          <div class="card-overlay"><div class="date">2026-07-13</div><div class="label">영상 · 2:25</div></div>
+          <div class="card-overlay"><div class="date">2026-07-13</div><div class="label">영상 · 2:25 <span class="comment-btn" onclick="openLightbox('','cd3_web.mp4',true)">💬 댓글</span></div></div>
         </div>
         <div class="card wide">
           <video controls preload="metadata" playsinline>
             <source src="cd4_web.mp4" type="video/mp4">
           </video>
-          <div class="card-overlay"><div class="date">2026-07-13</div><div class="label">영상 · 30:36</div></div>
+          <div class="card-overlay"><div class="date">2026-07-13</div><div class="label">영상 · 30:36 <span class="comment-btn" onclick="openLightbox('','cd4_web.mp4',true)">💬 댓글</span></div></div>
         </div>
       </div>
     </section>
 </main>
-
-<footer>Pregnancy diary · 출산예정일 <strong>2027-01-05</strong> · 새 사진이 추가되면 자동으로 갱신됩니다</footer>
-
+<footer>Pregnancy diary · 출산예정일 <strong>2027-01-05</strong> · 나스에 새 사진이 추가되면 12시간마다 자동으로 갱신됩니다</footer>
 <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
   <div class="lightbox-close" onclick="closeLightbox(event)">&times;</div>
-  <img id="lightbox-img" src="" alt="확대 이미지">
+  <div class="lightbox-inner" onclick="event.stopPropagation()">
+    <img id="lightbox-img" src="" alt="확대 이미지">
+    <div class="comment-box" id="comment-box">
+      <div class="comment-list" id="comment-list"></div>
+      <form class="comment-form" id="comment-form">
+        <input type="text" class="c-input-name" id="c-input-name" placeholder="이름" maxlength="20" required>
+        <input type="text" class="c-input-text" placeholder="댓글을 남겨보세요" maxlength="300" required>
+        <button type="submit">등록</button>
+      </form>
+    </div>
+  </div>
 </div>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDjVPXOIBIQFvFBN7tSjw1hB6I4b-T7Uk",
+    authDomain: "baby-a52d3.firebaseapp.com",
+    projectId: "baby-a52d3",
+    storageBucket: "baby-a52d3.firebasestorage.app",
+    messagingSenderId: "958352459153",
+    appId: "1:958352459153:web:c725156fc33e1de1578630"
+  };
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
   const due = new Date("2027-01-05T00:00:00");
   const now = new Date();
   const diff = Math.ceil((due - now) / (1000*60*60*24));
   document.getElementById('dday').textContent = diff > 0 ? `D-${diff}` : (diff === 0 ? 'D-Day 🎉' : `출산 후 ${-diff}일`);
 
-  function openLightbox(src){
-    document.getElementById('lightbox-img').src = src;
+  const savedName = localStorage.getItem('diary-commenter-name');
+  if(savedName) document.getElementById('c-input-name').value = savedName;
+
+  let unsub = null;
+
+  window.openLightbox = function(src, photoId, isVideo){
+    const img = document.getElementById('lightbox-img');
+    const box = document.getElementById('comment-box');
+    if(isVideo){
+      img.src = '';
+      box.classList.add('no-image');
+    } else {
+      img.src = src;
+      box.classList.remove('no-image');
+    }
     document.getElementById('lightbox').classList.add('open');
-  }
-  function closeLightbox(e){
+    loadComments(photoId);
+  };
+
+  window.closeLightbox = function(e){
     if(e.target.id === 'lightbox' || e.target.classList.contains('lightbox-close')){
       document.getElementById('lightbox').classList.remove('open');
+      if(unsub){ unsub(); unsub = null; }
     }
-  }
+  };
+
   document.addEventListener('keydown', (e) => {
-    if(e.key === 'Escape') document.getElementById('lightbox').classList.remove('open');
+    if(e.key === 'Escape'){
+      document.getElementById('lightbox').classList.remove('open');
+      if(unsub){ unsub(); unsub = null; }
+    }
+  });
+
+  function loadComments(photoId){
+    const list = document.getElementById('comment-list');
+    list.innerHTML = '<div class="c-loading">불러오는 중...</div>';
+    document.getElementById('comment-form').dataset.photoId = photoId;
+    if(unsub) unsub();
+    const q = query(collection(db, 'comments', photoId, 'items'), orderBy('createdAt', 'asc'));
+    unsub = onSnapshot(q, (snap) => {
+      if(snap.empty){
+        list.innerHTML = '<div class="c-empty">아직 댓글이 없어요. 첫 댓글을 남겨보세요 💌</div>';
+        return;
+      }
+      list.innerHTML = '';
+      snap.forEach(doc => {
+        const d = doc.data();
+        const item = document.createElement('div');
+        item.className = 'c-item';
+        const nameEl = document.createElement('span');
+        nameEl.className = 'c-name';
+        nameEl.textContent = d.name;
+        const textEl = document.createElement('span');
+        textEl.className = 'c-text';
+        textEl.textContent = d.text;
+        item.appendChild(nameEl);
+        item.appendChild(textEl);
+        list.appendChild(item);
+      });
+      list.scrollTop = list.scrollHeight;
+    }, (err) => {
+      list.innerHTML = '<div class="c-empty">댓글을 불러오지 못했어요.</div>';
+      console.error(err);
+    });
+  }
+
+  document.getElementById('comment-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const photoId = form.dataset.photoId;
+    const nameInput = form.querySelector('.c-input-name');
+    const textInput = form.querySelector('.c-input-text');
+    const name = nameInput.value.trim();
+    const text = textInput.value.trim();
+    if(!name || !text || !photoId) return;
+    const btn = form.querySelector('button');
+    btn.disabled = true;
+    try {
+      await addDoc(collection(db, 'comments', photoId, 'items'), {
+        name: name.slice(0, 20), text: text.slice(0, 300), createdAt: serverTimestamp()
+      });
+      localStorage.setItem('diary-commenter-name', name);
+      textInput.value = '';
+    } catch(err) {
+      console.error(err);
+      alert('댓글 등록에 실패했어요. 잠시 후 다시 시도해주세요.');
+    } finally {
+      btn.disabled = false;
+    }
   });
 </script>
-
 </body>
 </html>
